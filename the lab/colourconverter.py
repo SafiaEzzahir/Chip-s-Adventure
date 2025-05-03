@@ -13,13 +13,17 @@ for index in range(0, 5, 2):
 
     if chars[index].isnumeric():
         digit += int(chars[index])*16
+        print(digit)
     else:
         digit += letters.get(chars[index].upper())*16
-    
+        print(digit)
+
     if chars[index+1].isnumeric():
         digit += int(chars[index+1])
+        print(digit)
     else:
         digit += letters.get(chars[index+1].upper())
+        print(digit)
 
     digit = int(digit)/255
     digits.append(str(round(digit, 3)))
