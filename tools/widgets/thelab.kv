@@ -1,0 +1,94 @@
+WidgetsExample:
+
+<WidgetsExample>:
+    cols: 3
+    Button:
+        text: "counter"
+        on_press: root.on_button_click()
+    Label:
+        text: root.my_text
+
+<PageLayoutExample@PageLayout>:
+    MainWidget:
+    BoxLayoutExample:
+    AnchorLayoutExample:
+    GridLayoutExample:
+
+<ScrollViewExample@ScrollView>:
+    StackLayoutExample:
+        size_hint: 1, None
+        height: self.minimum_height
+
+<StackLayoutExample>:
+    #orientation: "rl-bt"
+    #padding: ("20dp", "20dp", "20dp", "20dp")
+    #spacing: "20dp", "15dp"
+
+<GridLayoutExample@GridLayout>:
+    cols: 3
+    Button:
+        text: "A"
+        size_hint: None, 1
+        width: "80dp"
+    Button:
+        text: "B"
+    Button:
+        text: "C"
+    Button:
+        text: "D"
+        size_hint: None, 1
+        width: "80dp"
+    BoxLayoutExample
+    Button:
+        text: "F"
+
+<AnchorLayoutExample>:
+    anchor_x: "center"
+    anchor_y: "top"
+    BoxLayout:
+        size_hint: .2, .2
+        Button:
+            text: "A"
+        Button:
+            text: "B"
+
+<BoxLayoutExample>:
+    Button:
+        text: "A"
+        size: 1, 1
+    BoxLayout:
+        orientation: "vertical"
+        size: 1, 1
+        spacing: "20dp"
+        Button:
+            text: "B1"
+            size_hint: 0.8, 0.8
+            pos_hint: {"center_x" : 0.5}
+        Button:
+            text: "B1"
+            size_hint: 0.8, 0.8
+            pos_hint: {"center_x" : 0.5}
+        Button:
+            text: "B1"
+            size_hint: 0.8, 0.8
+            pos_hint: {"center_x" : 0.5}
+        Button:
+            text: "B1"
+            size_hint: 0.8, 0.8
+            pos_hint: {"center_x" : 0.5}
+    Button:
+        text: "C"
+        size: 1, 1
+
+
+<MainWidget>:
+    Button:
+        text: "Hello"
+        size: "100dp", "80dp"
+        pos: "100dp", "200dp"
+        color: 0, 0, 1, 1
+    Label:
+        text: "Hello2"
+        size: "100dp", "80dp"
+        pos: "200dp", "300dp"
+        color: 1, 0, 0, 1
