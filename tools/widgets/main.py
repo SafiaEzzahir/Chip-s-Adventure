@@ -14,7 +14,7 @@ class WidgetsExample(GridLayout):
     def on_button_click(self):
         print("Button clicked \n")
         self.count += 1
-        self.my_text = "u clicked " + str(self.count) + " times"
+        self.my_text = "clicked " + str(self.count) + " times"
 
 class StackLayoutExample(StackLayout):
     def __init__(self, **kwargs):
