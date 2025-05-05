@@ -11,10 +11,17 @@ from kivy.properties import StringProperty
 class WidgetsExample(GridLayout):
     my_text = StringProperty("Hello!")
     count = 0
+
     def on_button_click(self):
         print("Button clicked \n")
         self.count += 1
         self.my_text = "clicked " + str(self.count) + " times"
+
+    def on_toggle_button_state(self, widget):
+        if widget.state == "normal":
+            widget.text = "OFF"
+        else:
+            widget.text = "ON"
 
 class StackLayoutExample(StackLayout):
     def __init__(self, **kwargs):
