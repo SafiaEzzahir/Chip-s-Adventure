@@ -6,12 +6,12 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.metrics import dp
 from kivy.app import App
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, BooleanProperty
 
 class WidgetsExample(GridLayout):
     my_text = StringProperty("Hello!")
     count = 0
-    canCount = False
+    canCount = BooleanProperty(False)
 
     def on_button_click(self):
         if self.canCount:
