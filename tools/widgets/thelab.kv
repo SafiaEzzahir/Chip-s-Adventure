@@ -19,6 +19,10 @@ WidgetsExample:
         font_name: "fonts/data-latin.ttf"
         font_size: "20dp"
         color: 0.01, 1, 0.01, 1
+    Switch:
+        on_active: root.on_switch_active(self)
+        size_hint: None, 1
+        width: "100dp"
 
 <PageLayoutExample@PageLayout>:
     MainWidget:
