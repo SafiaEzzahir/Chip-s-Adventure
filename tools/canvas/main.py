@@ -58,6 +58,11 @@ class CanvasExample4(Widget):
             Color(0, 1, 0)
             Line(circle=(400, 200, 80), width=2)
             Line(rectangle=(700, 500, 150, 100), width=5)
-            Rectangle(pos=(700, 200), size=(150, 100))
+            self.rect = Rectangle(pos=(700, 200), size=(150, 100))
+    
+    def on_button_a_click(self):
+        x, y = self.rect.pos
+        x += dp(10)
+        self.rect.pos = (x, y)
 
 TheLabApp().run()
