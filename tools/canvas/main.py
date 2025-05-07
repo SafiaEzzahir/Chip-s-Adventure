@@ -111,4 +111,7 @@ class CanvasExample5(Widget):
 class CanvasExample6(Widget):
     pass
 
+class CanvasExample7(BoxLayout):
+    pass
+
 TheLabApp().run()
