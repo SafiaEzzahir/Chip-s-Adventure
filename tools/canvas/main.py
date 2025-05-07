@@ -1,10 +1,10 @@
 from kivy.uix.widget import Widget
+from kivy.properties import Clock
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.anchorlayout import AnchorLayout
-from kivy.graphics.vertex_instructions import Line
 from kivy.graphics.context_instructions import Color
-from kivy.graphics.vertex_instructions import Rectangle
+from kivy.graphics.vertex_instructions import Rectangle, Line, Ellipse
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.metrics import dp
@@ -71,5 +71,41 @@ class CanvasExample4(Widget):
 
         x += inc
         self.rect.pos = (x, y)
+
+class CanvasExample5(Widget):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.ball_size = dp(50)
+        self.vx = dp(3)
+        self.vy = dp(4)
+        with self.canvas:
+            self.ball = Ellipse(pos=(100, 100), size=(self.ball_size, self.ball_size))
+        Clock.schedule_interval(self.update, 1/60)
+    
+    def on_size(self, *args):
+        #print("on size : " + str(self.width) + ", " + str(self.height))
+        self.ball.pos = (self.center_x-self.ball_size/2, self.center_y-self.ball_size/2)
+
+    def update(self, dt):
+        #print("update")
+        x, y = self.ball.pos
+        x += self.vx
+        y += self.vy
+
+        if x+self.ball_size > self.width:
+            x = self.width-self.ball_size
+            self.vx = - self.vx
+        elif x < 0:
+            x = 0
+            self.vx = - self.vx
+        
+        if y+self.ball_size > self.height:
+            y = self.height-self.ball_size
+            self.vy = - self.vy
+        elif y < 0:
+            y = 0
+            self.vy = - self.vy
+
+        self.ball.pos = (x, y)
 
 TheLabApp().run()
