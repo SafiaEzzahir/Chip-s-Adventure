@@ -1,4 +1,4 @@
-I'm learning kivy right now (trying to make a cute mobile app/game).
+I'm learning kivy right now (trying to make a cute mobile app/game for Hack Club's Neighborhood).
 
 You can use my colour converter - just download the file (you might need to download python3 as well).
 Run it in the command line with "python3 colourconverterversion2.py".
