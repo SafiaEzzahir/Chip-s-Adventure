@@ -9,11 +9,11 @@ class MainWidget(Widget):
     perspective_point_y = NumericProperty(0)
 
     V_NB_LINES = 10
-    V_LINES_SPACING = .1 #10% of screen width
+    V_LINES_SPACING = .25 #10% of screen width
     vertical_lines = []
 
     H_NB_LINES = 15
-    H_LINES_SPACING = .2 #10% of screen width
+    H_LINES_SPACING = .1 #10% of screen width
     horizontal_lines = []
 
     def __init__(self, **kwargs):
@@ -86,13 +86,13 @@ class MainWidget(Widget):
         return int(x), int(y)
     
     def transform_perspective(self, x, y):
-        tr_y = y * self.perspective_point_y / self.height
-        if tr_y > self.perspective_point_y:
-            tr_y = self.perspective_point_y
+        lin_y = y * self.perspective_point_y / self.height
         diff_x = x - self.perspective_point_x
-        diff_y = self.perspective_point_y - tr_y
-        proportion_y = diff_y / self.perspective_point_y
-        tr_x = self.perspective_point_x + diff_x * proportion_y
+        diff_y = self.perspective_point_y - lin_y
+        factor_y = diff_y / self.perspective_point_y
+        factor_y = pow(factor_y, 4)
+        tr_x = self.perspective_point_x + diff_x * factor_y
+        tr_y = self.perspective_point_y - factor_y * self.perspective_point_y
         return int(tr_x), int(tr_y)
 
 class GalaxyApp(App):
