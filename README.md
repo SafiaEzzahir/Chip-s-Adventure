@@ -1,5 +1,3 @@
-I'm learning kivy right now (trying to make a cute mobile app/game for Hack Club's Neighborhood).
+I'm learning kivy right now (trying to make a cute mobile app/game for Hack Club's Neighborhood). /tools and /practice are just me messing around with kivy to get to know it.
 
-You can use my colour converter - just download the file (you might need to download python3 as well).
-Run it in the command line with "python3 colourconverterversion2.py".
-It only works with hex codes tho (e.g. #32F48A).
+Version 1 (v1) is currently in progress. 
