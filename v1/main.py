@@ -13,9 +13,12 @@ class MainWidget(Widget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         from chip import Chip
+        from text import Text
         self.chip = Chip(self.width, self.height)
+        self.intro = Text()
+        self.intro.inittext("this is chip:", "assets/fontly.ttf", (0, 0, 0))
         self.init_background()
-        Clock.schedule_interval(self.update, 1.0/60.0)
+        Clock.schedule_interval(self.update, 1.0/30.0)
 
     def init_background(self):
         with self.canvas:
@@ -31,8 +34,9 @@ class MainWidget(Widget):
         self.update_background()
         with self.canvas:
             Color(None)
-            self.chip.current_pos = (self.width/2, self.height/2)
+            self.chip.current_pos = (self.width/2 - self.chip.currentsizex/2, self.height/2 - self.chip.currentsizey/2)
             self.chip.show()
+        self.add_widget(self.intro.show())
 
 class Version1app(App):
     def build(self):
