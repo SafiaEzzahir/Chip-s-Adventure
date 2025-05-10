@@ -3,6 +3,7 @@ from kivy.uix.widget import Widget
 from kivy.graphics.vertex_instructions import Rectangle
 from kivy.properties import Clock
 from kivy.graphics.context_instructions import Color
+from kivy.uix.image import Image
 
 class MainWidget(Widget):
 
@@ -11,7 +12,8 @@ class MainWidget(Widget):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        print("baa")
+        from chip import Chip
+        self.chip = Chip(self.width, self.height)
         self.init_background()
         Clock.schedule_interval(self.update, 1.0/60.0)
 
@@ -27,6 +29,10 @@ class MainWidget(Widget):
 
     def update(self, dt):
         self.update_background()
+        with self.canvas:
+            Color(None)
+            self.chip.current_pos = (self.width/2, self.height/2)
+            self.chip.show()
 
 class Version1app(App):
     def build(self):
