@@ -1,0 +1,36 @@
+from kivy.app import App
+from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
+from kivy.lang import Builder
+from kivy.properties import Clock
+
+class Screener(ScreenManager):  
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        from screens.menu import MenuScreen
+        from screens.level import LevelScreen
+        from screens.cutscenes import CutsceneScreen
+        from gamemanager import GameManager
+        self.gamemanager = GameManager()
+        self.menu = MenuScreen()
+        self.level = LevelScreen()
+        self.cutscene = CutsceneScreen()
+        self.add_widget(self.menu)
+        self.add_widget(self.level)
+        self.add_widget(self.cutscene)
+        self.current = "menu"
+        Clock.schedule_interval(self.update, 1.0/25.0)
+
+    def update(self, dt):
+        #self.current = self.gamemanager.updategm()
+        newcurrent = self.gamemanager.updategm()
+        if newcurrent != self.current:
+            self.canvas.clear()
+            self.current = newcurrent
+        self.current_screen.update(self)
+
+class Version3App(App):
+    def build(self):
+        return Builder.load_file("version3.kv")
+    
+if __name__ == '__main__':
+    Version3App().run()
