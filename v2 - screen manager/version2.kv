@@ -1,0 +1,34 @@
+ScreenManager:
+    MenuScreen:
+    GameScreen:
+    CutsceneScreen:
+
+<MenuScreen>:
+    name: "menu"
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Welcome to Chip's Game"
+        Button:
+            text: "Start"
+            on_press: root.manager.current = "game"
+
+<GameScreen>:
+    name: "game"
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Gameplay Screen"
+        Button:
+            text: "Finish Level"
+            on_press: root.manager.current = "cutscene"
+
+<CutsceneScreen>:
+    name: "cutscene"
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Chip's POV Cutscene"
+        Button:
+            text: "Back to Menu"
+            on_press: root.manager.current = "menu"
