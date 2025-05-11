@@ -3,6 +3,7 @@ from kivy.graphics.vertex_instructions import Rectangle
 from kivy.graphics.context_instructions import Color
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.metrics import dp
 
 class MenuScreen(Screen):
     def __init__(self, **kwargs):
@@ -12,11 +13,12 @@ class MenuScreen(Screen):
         self.mb_colr = 1
         self.mb_colg = 0.7922
         self.mb_colb = 0.686275
-        self.lbl = 40
+        self.lbl = dp(80)
         self.font = "assets/fontly.ttf"
+        self.fontsize = self.lbl/2
 
     def update(self):
-        self.play = Label(text="play", size_hint=(None, None), size=("80dp", "80dp"), pos=(self.center_x-self.lbl, self.center_y-self.lbl), font_name=self.font)
+        self.play = Label(text="play", size_hint=(None, None), size=(self.lbl, self.lbl), pos=(self.center_x-self.lbl/2, self.center_y-self.lbl/2), font_name=self.font, font_size=self.fontsize)
         with self.canvas:
             Color(self.mb_colr, self.mb_colg, self.mb_colb)
             self.backround = Rectangle(size=self.size)
