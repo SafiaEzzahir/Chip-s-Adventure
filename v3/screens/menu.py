@@ -13,9 +13,10 @@ class MenuScreen(Screen):
         self.mb_colg = 0.7922
         self.mb_colb = 0.686275
         self.lbl = 40
+        self.font = "assets/fontly.ttf"
 
     def update(self):
-        self.play = Label(text="play", size_hint=(None, None), size=("80dp", "80dp"), pos=(self.center_x-self.lbl, self.center_y-self.lbl))
+        self.play = Label(text="play", size_hint=(None, None), size=("80dp", "80dp"), pos=(self.center_x-self.lbl, self.center_y-self.lbl), font_name=self.font)
         with self.canvas:
             Color(self.mb_colr, self.mb_colg, self.mb_colb)
             self.backround = Rectangle(size=self.size)
