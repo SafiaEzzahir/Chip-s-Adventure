@@ -6,6 +6,5 @@ class GameManager():
         if self.count >= 200:
             return "level"
         else:
-            print(self.count)
             self.count +=1
             return "menu"

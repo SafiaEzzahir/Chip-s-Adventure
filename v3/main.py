@@ -18,7 +18,7 @@ class Screener(ScreenManager):
         self.add_widget(self.level)
         self.add_widget(self.cutscene)
         self.current = "menu"
-        Clock.schedule_interval(self.update, 1.0/25.0)
+        Clock.schedule_interval(self.update, 1.0/20.0)
 
     def update(self, dt):
         #self.current = self.gamemanager.updategm()
@@ -26,7 +26,7 @@ class Screener(ScreenManager):
         if newcurrent != self.current:
             self.canvas.clear()
             self.current = newcurrent
-        self.current_screen.update(self)
+        self.current_screen.update()
 
 class Version3App(App):
     def build(self):
