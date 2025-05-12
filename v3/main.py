@@ -6,6 +6,7 @@ from kivy.properties import Clock
 class Screener(ScreenManager):  
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.transition = FadeTransition()
         from screens.menu import MenuScreen
         from screens.level import LevelScreen
         from screens.cutscenes import CutsceneScreen
