@@ -1,5 +1,5 @@
 from kivy.uix.screenmanager import Screen
-from kivy.graphics.vertex_instructions import Rectangle
+from kivy.graphics.vertex_instructions import Rectangle, Line
 from kivy.graphics.context_instructions import Color
 from kivy.uix.button import Button
 from kivy.uix.label import Label
@@ -18,8 +18,12 @@ class MenuScreen(Screen):
         self.fontsize = self.lbl/2
 
     def update(self):
-        self.play = Label(text="play", size_hint=(None, None), size=(self.lbl, self.lbl), pos=(self.center_x-self.lbl/2, self.center_y-self.lbl/2), font_name=self.font, font_size=self.fontsize)
+        self.lblx = self.center_x-self.lbl/2
+        self.lbly = self.center_y-self.lbl/2
+        self.play = Label(text="play", size_hint=(None, None), size=(self.lbl, self.lbl), pos=(self.lblx, self.lbly), font_name=self.font, font_size=self.fontsize)
         with self.canvas:
             Color(self.mb_colr, self.mb_colg, self.mb_colb)
             self.backround = Rectangle(size=self.size)
+            Color(0, 0, 0)
+            Rectangle(pos=(self.lblx+dp(5), self.lbly+dp(5)), size=(self.lbl-dp(7), self.lbl-dp(16)))
         self.add_widget(self.play)

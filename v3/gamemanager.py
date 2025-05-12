@@ -3,8 +3,4 @@ class GameManager():
         self.count = 0
 
     def updategm(self):
-        if self.count >= 200:
-            return "level"
-        else:
-            self.count +=1
-            return "menu"
+        return "menu"
