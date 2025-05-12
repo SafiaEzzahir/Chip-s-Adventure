@@ -27,4 +27,7 @@ class MenuScreen(Screen):
             Color(self.mb_colr, self.mb_colg, self.mb_colb)
             self.backround = Rectangle(size=self.size)
         self.playbutton = Button(text="play", size_hint=(None, None), size=(self.lbl, self.lbl-dp(20)), pos=(self.lblx, self.lbly), on_press=self.onplay, font_name=self.font, font_size=self.fontsize)
+        self.playbutton.background_normal = ""
+        self.playbutton.background_down = ""
+        self.playbutton.background_color = (1, 1, 0, 1)
         self.add_widget(self.playbutton)
