@@ -16,9 +16,13 @@ class MenuScreen(Screen):
         self.backupfont = "assets/fontly.ttf"
         self.fontsize = self.lbl/2
         self.font = "assets/default.ttf"
+        self.change = "menu"
     
     def onplay(self, instance):
-        pass
+        self.change = "level"
+
+    def is_changed(self):
+        return self.change
 
     def generateplaybutton(self, size, centerx, centery):
         return Button(text="play", size_hint=(None, None), size=size, center_x=centerx, center_y=centery, on_press=self.onplay, font_name=self.font, font_size=self.fontsize)

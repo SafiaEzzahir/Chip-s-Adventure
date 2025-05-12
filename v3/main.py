@@ -21,8 +21,8 @@ class Screener(ScreenManager):
         Clock.schedule_interval(self.update, 1.0/20.0)
 
     def update(self, dt):
-        #self.current = self.gamemanager.updategm()
-        newcurrent = self.gamemanager.updategm()
+        change = self.current_screen.is_changed()
+        newcurrent = change
         if newcurrent != self.current:
             self.canvas.clear()
             self.current = newcurrent
