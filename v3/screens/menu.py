@@ -16,14 +16,15 @@ class MenuScreen(Screen):
         self.lbl = dp(80)
         self.font = "assets/fontly.ttf"
         self.fontsize = self.lbl/2
+    
+    def onplay(self, instance):
+        pass
 
     def update(self):
         self.lblx = self.center_x-self.lbl/2
         self.lbly = self.center_y-self.lbl/2
-        self.play = Label(text="play", size_hint=(None, None), size=(self.lbl, self.lbl), pos=(self.lblx, self.lbly), font_name=self.font, font_size=self.fontsize)
         with self.canvas:
             Color(self.mb_colr, self.mb_colg, self.mb_colb)
             self.backround = Rectangle(size=self.size)
-            Color(0, 0, 0)
-            Rectangle(pos=(self.lblx+dp(5), self.lbly+dp(5)), size=(self.lbl-dp(7), self.lbl-dp(16)))
-        self.add_widget(self.play)
+        self.playbutton = Button(text="play", size_hint=(None, None), size=(self.lbl, self.lbl-dp(20)), pos=(self.lblx, self.lbly), on_press=self.onplay, font_name=self.font, font_size=self.fontsize)
+        self.add_widget(self.playbutton)
