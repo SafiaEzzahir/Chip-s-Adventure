@@ -5,6 +5,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.metrics import dp
 from kivy.utils import get_color_from_hex
+from kivy.uix.image import Image
 
 class MenuScreen(Screen):
     def __init__(self, **kwargs):
@@ -27,4 +28,6 @@ class MenuScreen(Screen):
         self.playbutton = self.generateplaybutton((self.lbl, self.lbl-dp(20)), (self.lblx, self.lbly))
         self.playbutton.background_normal = ""
         self.playbutton.background_down = ""
+        self.backround = Image(source="assets/backgroundgradient.png", allow_stretch=True, keep_ratio=False)
+        self.add_widget(self.backround)
         self.add_widget(self.playbutton)
