@@ -10,10 +10,13 @@ class LevelScreen(Screen):
         super().__init__(**kwargs)
         self.name = "level"
         self.chip = Chip(self)
+        #self.background_color = get_color_from_hex("FFC184")
+
+    def update_graphics(self):
+        self.add_widget(self.chip.get_chip_pic())
 
     def update(self):
-        #self.add_widget(Button(text="hey", background_color=get_color_from_hex("BEA99B")))
-        self.chip.update()
+        self.update_graphics()
 
     def is_changed(self):
         return "level"
