@@ -6,11 +6,14 @@ from kivy.uix.button import Button
 
 class LevelScreen(Screen):
     def __init__(self, **kwargs):
+        from chip import Chip
         super().__init__(**kwargs)
         self.name = "level"
+        self.chip = Chip(self)
 
     def update(self):
-        self.add_widget(Button(text="hey", background_color=get_color_from_hex("BEA99B")))
+        #self.add_widget(Button(text="hey", background_color=get_color_from_hex("BEA99B")))
+        self.chip.update()
 
     def is_changed(self):
         return "level"
