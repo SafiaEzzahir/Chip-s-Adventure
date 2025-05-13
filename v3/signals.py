@@ -5,6 +5,7 @@ class Corn():
     def __init__(self, posx, posy):
         self.posx = posx
         self.posy = posy
+        self.sizes = dp(40)
 
     def update(self):
-        return Image(size_hint=(None, None), pos=(self.posx, self.posy), source="assets/corn.png", size=(dp(40), dp(40)))
+        return Image(size_hint=(None, None), pos=(self.posx-self.sizes/2, self.posy-self.sizes/2), source="assets/corn.png", size=(self.sizes, self.sizes))
