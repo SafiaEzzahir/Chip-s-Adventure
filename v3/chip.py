@@ -18,6 +18,8 @@ class Chip(FloatLayout):
         self.posx = dp(50)
         self.posy = dp(200)
         self.sizes = (dp(345/2), dp(500/2))
+        self.manage_count = 0
+        self.nearest = None
 
     def move_to(self, signal, signals, target_posx, target_posy):
         dx = target_posx - self.posx
@@ -29,7 +31,8 @@ class Chip(FloatLayout):
             self.posx = target_posx
             self.posy = target_posy
             self.state = "arrived"
-            signals.remove(signal)
+            if signal in signals:
+                signals.remove(signal)
             return
         # Normalize direction and step
         step_x = dx / dist * self.speed
@@ -58,9 +61,14 @@ class Chip(FloatLayout):
         return nearest_signal
     
     def update_state(self, signals):
-        nearest = self.find_nearest_signal(signals)
-        if nearest:
-            self.move_to(nearest, signals, nearest.posx, nearest.posy)
+        if self.manage_count == 0:
+            self.nearest = self.find_nearest_signal(signals)
+        if self.nearest:
+            self.move_to(self.nearest, signals, self.nearest.posx, self.nearest.posy)
+        if self.manage_count == 10:
+            self.manage_count = 0
+        else:
+            self.manage_count += 1
 
     def update(self, signals):
         self.update_state(signals)

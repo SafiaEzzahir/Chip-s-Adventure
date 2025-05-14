@@ -19,7 +19,7 @@ class Screener(ScreenManager):
         self.add_widget(self.level)
         self.add_widget(self.cutscene)
         self.current = "menu"
-        Clock.schedule_interval(self.update, 1.0/50.0)
+        Clock.schedule_interval(self.update, 1.0/20.0)
 
     def update(self, dt):
         change = self.current_screen.is_changed()
