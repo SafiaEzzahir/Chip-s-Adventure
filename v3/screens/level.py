@@ -22,7 +22,6 @@ class LevelScreen(Screen):
     
     def on_touch_up(self, touch):
         from signals import Corn
-        print(str(touch.x) + " " + str(touch.y))
         self.corns.append(Corn(touch.x, touch.y))
         return super().on_touch_up(touch)
 
@@ -30,6 +29,8 @@ class LevelScreen(Screen):
         self.update_graphics()
         for corn in self.corns:
             self.add_widget(corn.update())
+        self.chip.update(self.corns)
+        #print(self.corns)
 
     def is_changed(self):
         return "level"
