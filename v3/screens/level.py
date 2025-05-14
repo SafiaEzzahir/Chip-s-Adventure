@@ -18,7 +18,6 @@ class LevelScreen(Screen):
         with self.canvas:
             Color(*self.backroundcol)
             self.backround = Rectangle(size=(self.width, self.height))
-        self.add_widget(self.chip.get_chip_pic())
     
     def on_touch_up(self, touch):
         from signals import Corn
@@ -30,6 +29,7 @@ class LevelScreen(Screen):
         for corn in self.corns:
             self.add_widget(corn.update())
         self.chip.update(self.corns)
+        self.add_widget(self.chip.get_chip_pic())
         #print(self.corns)
 
     def is_changed(self):

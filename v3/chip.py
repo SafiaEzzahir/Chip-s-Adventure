@@ -10,7 +10,7 @@ class Chip(FloatLayout):
         super().__init__(**kwargs)
         self.state = "idle"
         self.target = None
-        self.speed = 2
+        self.speed = 10
         self.screen = screen
         self.signal_responses = {
             "footprint": self.move_to
@@ -22,14 +22,16 @@ class Chip(FloatLayout):
         self.nearest = None
 
     def move_to(self, signal, signals, target_posx, target_posy):
-        dx = target_posx - self.posx
-        dy = target_posy - self.posy
+        self.posx_center = self.posx+self.sizes[0]
+        self.posy_center = self.posy+self.sizes[1]/2
+        dx = target_posx - self.posx_center
+        dy = target_posy - self.posy_center
         dist = (dx**2 + dy**2) ** 0.5
 
-        if dist < 1:
+        if dist < self.speed:
         # Already at the target
-            self.posx = target_posx
-            self.posy = target_posy
+            self.posx = target_posx - self.sizes[0]
+            self.posy = target_posy - self.sizes[1]/2
             self.state = "arrived"
             if signal in signals:
                 signals.remove(signal)
