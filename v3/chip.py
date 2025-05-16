@@ -50,7 +50,7 @@ class Chip(FloatLayout):
         pass
 
     def distance_to(self, posx, posy):
-        return Vector(*self.pos).distance((posx, posy))
+        return Vector((self.pos[0], self.pos[1]+self.sizes[1]/2)).distance((posx, posy))
 
     def find_nearest_signal(self, signals):
         shortest_distance = float("inf")

@@ -7,7 +7,13 @@ class Corn():
         self.posy = posy
         self.sizes = dp(40)
         self.type = "corn"
-        self.pos = (self.posx, self.posy)
+        self.poss = (self.posx-self.sizes/2, self.posy-self.sizes/2)
 
-    def update(self):
-        return Image(size_hint=(None, None), pos=(self.posx-self.sizes/2, self.posy-self.sizes/2), source="assets/corn.png", size=(self.sizes, self.sizes))
+    def check_pos(self, bppos):
+        if self.poss[0]>=bppos[0] and self.poss[1]<=bppos[1]:
+            return None
+        else:
+            return Image(size_hint=(None, None), pos=(self.poss), source="assets/corn.png", size=(self.sizes, self.sizes))
+
+    def update(self, bppos):
+        return self.check_pos(bppos)
