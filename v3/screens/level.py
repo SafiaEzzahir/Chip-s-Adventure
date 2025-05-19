@@ -13,8 +13,7 @@ class LevelScreen(Screen):
         self.name = "level"
         self.chip = Chip(self)
         self.backround = None
-        self.backpack = Backpack()
-        self.backpackback = None
+        
         self.backroundcol = get_color_from_hex("#FFC184")
         self.corns = []
         self.bpwidth = dp(400)
@@ -22,12 +21,15 @@ class LevelScreen(Screen):
         self.bppos = (self.width-self.bpwidth-dp(5), dp(5))
         
         self.allowed_signals = {"corn": 4}
+        self.backpack = Backpack(self.allowed_signals, (self.bpwidth, self.bpheight))
+        self.backpackback = None
 
     def update_backpack(self):
         with self.canvas:
             Color(*get_color_from_hex("6E514A"))
             self.bppos = (self.width-self.bpwidth-dp(5), dp(5))
-            self.backpackback = Rectangle(size=(self.bpwidth, self.bpheight), pos=(self.width-self.bpwidth-dp(5), dp(5)))
+            self.backpackback = Rectangle(size=(self.bpwidth, self.bpheight), pos=(self.bppos))
+            self.backpack.update_graphics(self.bppos)
 
     def update_graphics(self):
         with self.canvas:
