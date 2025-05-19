@@ -8,22 +8,26 @@ from kivy.uix.button import Button
 class LevelScreen(Screen):
     def __init__(self, **kwargs):
         from chip import Chip
+        from backpack import Backpack
         super().__init__(**kwargs)
         self.name = "level"
         self.chip = Chip(self)
         self.backround = None
-        self.backpack = None
+        self.backpack = Backpack()
+        self.backpackback = None
         self.backroundcol = get_color_from_hex("#FFC184")
         self.corns = []
         self.bpwidth = dp(400)
         self.bpheight = dp(120)
         self.bppos = (self.width-self.bpwidth-dp(5), dp(5))
+        
+        self.allowed_signals = {"corn": 4}
 
     def update_backpack(self):
         with self.canvas:
             Color(*get_color_from_hex("6E514A"))
             self.bppos = (self.width-self.bpwidth-dp(5), dp(5))
-            self.backpack = Rectangle(size=(self.bpwidth, self.bpheight), pos=(self.width-self.bpwidth-dp(5), dp(5)))
+            self.backpackback = Rectangle(size=(self.bpwidth, self.bpheight), pos=(self.width-self.bpwidth-dp(5), dp(5)))
 
     def update_graphics(self):
         with self.canvas:
@@ -33,7 +37,8 @@ class LevelScreen(Screen):
     
     def on_touch_up(self, touch):
         from signals import Corn
-        self.corns.append(Corn(touch.x, touch.y))
+        if len(self.corns) < self.allowed_signals["corn"]:
+            self.corns.append(Corn(touch.x, touch.y))
         return super().on_touch_up(touch)
 
     def update(self):
@@ -48,7 +53,6 @@ class LevelScreen(Screen):
         self.chip.update(self.corns)
         self.add_widget(self.chip.get_chip_pic())
         self.update_backpack()
-        #print(self.corns)
 
     def is_changed(self):
         return "level"
