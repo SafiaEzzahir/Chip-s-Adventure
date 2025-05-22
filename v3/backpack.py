@@ -25,7 +25,6 @@ class Backpack():
         #works out how wide a signal is
         for num in range(0, self.signal_number):
             if touchx >= self.bppos[0] + signal_width*num and touchx < self.bppos[0] + signal_width*(num+1):
-                print(types[num])
                 return types[num]
 
     def update_graphics(self, bppos):

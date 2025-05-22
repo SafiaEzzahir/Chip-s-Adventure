@@ -15,18 +15,20 @@ class LevelScreen(Screen):
         self.backround = None
 
         self.signal_types = ["corn", "footprint"]
-        
-        self.backroundcol = get_color_from_hex("#FFC184")
         self.signals = []
         self.corns = []
+        self.footprints_used = False
+        self.footprints = None
+
+        self.backroundcol = get_color_from_hex("#FFC184")
         self.bpwidth = dp(400)
         self.bpheight = dp(120)
         self.bppos = (self.width-self.bpwidth-dp(5), dp(5))
         
         self.allowed_signals = {"corn": 4, "footprints": 1}
         self.current_allowed_signals = {"corn": 4, "footprints": 1}
-        #self.backpack = Backpack(self.allowed_signals, (self.bpwidth, self.bpheight))
         self.current_signal = None
+        
         self.backpackback = None
 
     def update_backpack(self):
@@ -45,7 +47,7 @@ class LevelScreen(Screen):
             Color(*get_color_from_hex("6E514A"))
     
     def on_touch_up(self, touch):
-        from signals import Corn
+        from signals import Corn, Footprint
         if int(touch.x) < self.bppos[0] or int(touch.y) > self.bppos[1]+self.backpack.sizes[1]:
             #was the click outside of the backpack? this is if not
             if self.current_signal == "corn":
@@ -56,7 +58,11 @@ class LevelScreen(Screen):
                     self.signals.append(current_corn)
 
             elif self.current_signal == "footprint":
-                pass
+                if self.footprints_used == False:
+                    self.footprints = Footprint((touch.x, touch.y))
+                    self.footprints_used = True
+                    self.current_allowed_signals["footprints"] = 0
+
         else:
             #click was in the backpack, now get which signal was clicked
             self.current_signal = self.backpack.is_touched(touch.x, self.signal_types)
@@ -65,6 +71,10 @@ class LevelScreen(Screen):
 
     def update(self):
         self.update_graphics()
+        
+        if self.footprints:
+            self.add_widget(self.footprints.update())
+        
         for corn in self.corns:
             c = corn.update((self.bppos[0], self.bppos[1]+self.bpheight))
             if c != None:

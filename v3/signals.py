@@ -19,10 +19,30 @@ class Corn():
         return self.check_pos(bppos)
 
 class Footprint():
-    def __init__(self):
+    def __init__(self, position):
         self.type = "footprint"
         self.mode = "footdown"
+        self.position = position
+        self.sizes = (dp(50), dp(50))
+
+    def footdown(self):
+        return Image(size_hint=(None, None), size=(self.sizes), source="assets/footprints.png", pos=self.position)
+
+    def shoesdown(self):
+        pass
+
+    def trackdown(self):
+        pass
+
+    def trackfinished(self):
+        pass
 
     def update(self):
         if self.mode == "footdown":
-            return Image(source="assets/footprints.png")
+            return self.footdown()
+        elif self.mode == "shoesdown":
+            return self.shoesdown()
+        elif self.mode == "trackdown":
+            return self.trackdown()
+        elif self.mode == "trackfinished":
+            return self.trackfinished()
