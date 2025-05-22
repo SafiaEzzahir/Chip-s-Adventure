@@ -2,6 +2,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.image import Image
+from kivy.metrics import dp
 
 class Backpack():
     def __init__(self, allowed_dict, sizes):
@@ -23,6 +24,6 @@ class Backpack():
             self.corn_layout.parent.remove_widget(self.corn_layout)
         if self.footprint_layout.parent:
             self.footprint_layout.parent.remove_widget(self.footprint_layout)
-        self.disp = GridLayout(pos=(bppos), size_hint=(None, None), size=self.sizes, cols=3)
+        self.disp = GridLayout(pos=(bppos), size_hint=(None, None), size=self.sizes, cols=3, padding=(dp(10), dp(10)))
         self.disp.add_widget(self.corn_layout)
         self.disp.add_widget(self.footprint_layout)
