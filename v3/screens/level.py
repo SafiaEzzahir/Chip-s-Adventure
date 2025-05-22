@@ -62,17 +62,23 @@ class LevelScreen(Screen):
                     self.footprints = Footprint((touch.x, touch.y))
                     self.footprints_used = True
                     self.current_allowed_signals["footprints"] = 0
+                else:
+                    if self.footprints.mode == "shoesdown":
+                        self.footprints.second_position = (touch.x, touch.y)
+                    elif self.footprints.mode == "trackfinished":
+                        self.current_signal = None
 
         else:
             #click was in the backpack, now get which signal was clicked
-            self.current_signal = self.backpack.is_touched(touch.x, self.signal_types)
+            if self.current_signal != "footprint":
+                self.current_signal = self.backpack.is_touched(touch.x, self.signal_types)
 
         return super().on_touch_up(touch)
 
     def update(self):
         self.update_graphics()
         
-        if self.footprints:
+        if self.footprints != None:
             self.add_widget(self.footprints.update())
         
         for corn in self.corns:

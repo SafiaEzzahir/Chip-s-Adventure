@@ -1,5 +1,6 @@
 from kivy.uix.image import Image
 from kivy.metrics import dp
+from kivy.uix.floatlayout import FloatLayout
 
 class Corn():
     def __init__(self, posx, posy):
@@ -24,12 +25,17 @@ class Footprint():
         self.mode = "footdown"
         self.position = position
         self.sizes = (dp(50), dp(50))
+        self.second_position = position
 
     def footdown(self):
+        self.mode = "shoesdown"
         return Image(size_hint=(None, None), size=(self.sizes), source="assets/footprints.png", pos=self.position)
 
     def shoesdown(self):
-        pass
+        layout = FloatLayout()
+        layout.add_widget(self.footdown())
+        layout.add_widget(Image(size_hint=(None, None), size=(self.sizes), source="assets/footprints.png", pos=self.second_position))
+        return layout
 
     def trackdown(self):
         pass
