@@ -13,6 +13,8 @@ class LevelScreen(Screen):
         self.name = "level"
         self.chip = Chip(self)
         self.backround = None
+
+        self.signal_types = ["corn", "footprint"]
         
         self.backroundcol = get_color_from_hex("#FFC184")
         self.signals = []
@@ -24,6 +26,7 @@ class LevelScreen(Screen):
         self.allowed_signals = {"corn": 4, "footprints": 1}
         self.current_allowed_signals = {"corn": 4, "footprints": 1}
         #self.backpack = Backpack(self.allowed_signals, (self.bpwidth, self.bpheight))
+        self.current_signal = None
         self.backpackback = None
 
     def update_backpack(self):
@@ -43,11 +46,20 @@ class LevelScreen(Screen):
     
     def on_touch_up(self, touch):
         from signals import Corn
+        if int(touch.x) < self.bppos[0] or int(touch.y) > self.bppos[1]+self.backpack.sizes[1]:
+            #was the click outside of the backpack? this is if not
+            if self.current_signal == "corn":
+                if len(self.corns) < self.allowed_signals["corn"]:
+                    #are there any corns left to place? if so, add a corn (below)
+                    current_corn = Corn(touch.x, touch.y)
+                    self.corns.append(current_corn)
+                    self.signals.append(current_corn)
 
-        if len(self.corns) < self.allowed_signals["corn"]:
-            current_corn = Corn(touch.x, touch.y)
-            self.corns.append(current_corn)
-            self.signals.append(current_corn)
+            elif self.current_signal == "footprint":
+                pass
+        else:
+            #click was in the backpack, now get which signal was clicked
+            self.current_signal = self.backpack.is_touched(touch.x, self.signal_types)
 
         return super().on_touch_up(touch)
 
