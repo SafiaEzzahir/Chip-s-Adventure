@@ -15,13 +15,14 @@ class LevelScreen(Screen):
         self.backround = None
         
         self.backroundcol = get_color_from_hex("#FFC184")
+        self.signals = []
         self.corns = []
         self.bpwidth = dp(400)
         self.bpheight = dp(120)
         self.bppos = (self.width-self.bpwidth-dp(5), dp(5))
         
-        self.allowed_signals = {"corn": 4}
-        self.current_allowed_signals = {"corn": 4}
+        self.allowed_signals = {"corn": 4, "footprints": 1}
+        self.current_allowed_signals = {"corn": 4, "footprints": 1}
         #self.backpack = Backpack(self.allowed_signals, (self.bpwidth, self.bpheight))
         self.backpackback = None
 
@@ -42,8 +43,12 @@ class LevelScreen(Screen):
     
     def on_touch_up(self, touch):
         from signals import Corn
+
         if len(self.corns) < self.allowed_signals["corn"]:
-            self.corns.append(Corn(touch.x, touch.y))
+            current_corn = Corn(touch.x, touch.y)
+            self.corns.append(current_corn)
+            self.signals.append(current_corn)
+
         return super().on_touch_up(touch)
 
     def update(self):
@@ -54,15 +59,17 @@ class LevelScreen(Screen):
                 self.add_widget(c)
             else:
                 self.corns.remove(corn)
+                self.signals.remove(corn)
 
         if self.chip.signal_to_remove != None:
             self.corns.remove(self.chip.signal_to_remove)
+            self.signals.remove(self.chip.signal_to_remove)
             self.chip.signal_to_remove = None
             #print(self.corns)
         
         self.current_allowed_signals["corn"] = 4-len(self.corns)
             
-        self.chip.update(self.corns)
+        self.chip.update(self.signals)
         #print(self.corns)
         self.add_widget(self.chip.get_chip_pic())
         self.update_backpack()

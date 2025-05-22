@@ -17,3 +17,12 @@ class Corn():
 
     def update(self, bppos):
         return self.check_pos(bppos)
+
+class Footprint():
+    def __init__(self):
+        self.type = "footprint"
+        self.mode = "footdown"
+
+    def update(self):
+        if self.mode == "footdown":
+            return Image(source="assets/footprints.png")
