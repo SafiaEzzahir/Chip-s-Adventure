@@ -21,11 +21,14 @@ class LevelScreen(Screen):
         self.bppos = (self.width-self.bpwidth-dp(5), dp(5))
         
         self.allowed_signals = {"corn": 4}
-        self.backpack = Backpack(self.allowed_signals, (self.bpwidth, self.bpheight))
+        self.current_allowed_signals = {"corn": 4}
+        #self.backpack = Backpack(self.allowed_signals, (self.bpwidth, self.bpheight))
         self.backpackback = None
 
     def update_backpack(self):
         with self.canvas:
+            from backpack import Backpack
+            self.backpack = Backpack(self.current_allowed_signals, (self.bpwidth, self.bpheight))
             Color(*get_color_from_hex("6E514A"))
             self.bppos = (self.width-self.bpwidth-dp(5), dp(5))
             self.backpackback = Rectangle(size=(self.bpwidth, self.bpheight), pos=(self.bppos))
@@ -51,8 +54,16 @@ class LevelScreen(Screen):
                 self.add_widget(c)
             else:
                 self.corns.remove(corn)
+
+        if self.chip.signal_to_remove != None:
+            self.corns.remove(self.chip.signal_to_remove)
+            self.chip.signal_to_remove = None
+            #print(self.corns)
+        
+        self.current_allowed_signals["corn"] = 4-len(self.corns)
             
         self.chip.update(self.corns)
+        #print(self.corns)
         self.add_widget(self.chip.get_chip_pic())
         self.update_backpack()
 
