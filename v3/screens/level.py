@@ -42,7 +42,6 @@ class LevelScreen(Screen):
         self.phoneboxes = []
         for box in self.phoneboxes_positions:
             self.phoneboxes.append(PhoneBox(box))
-            print("box")
 
     def update_backpack(self):
         with self.canvas:
@@ -89,6 +88,9 @@ class LevelScreen(Screen):
             #click was in the backpack, now get which signal was clicked
             if self.current_signal != "footprint":
                 self.current_signal = self.backpack.is_touched(touch.x, self.signal_types)
+                if self.current_signal == "phonebox":
+                    for box in self.phoneboxes:
+                        box.ringing = True
 
         return super().on_touch_up(touch)
 

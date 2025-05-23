@@ -57,10 +57,13 @@ class Footprint():
 class PhoneBox():
     def __init__(self, pos):
         self.pos = pos
-        print(self.pos)
         self.image = "assets/phonebox.png"
         self.ring = SoundLoader.load("assets/phonering.wav")
+        self.ringing = False
 
     def update(self):
+        if self.ringing == True:
+            self.ring.play()
+            self.ringing = False
         return Image(source=self.image, pos=self.pos, size=(dp(194), dp(500)), size_hint=(None, None))
 

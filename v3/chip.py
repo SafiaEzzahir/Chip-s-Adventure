@@ -15,8 +15,8 @@ class Chip(FloatLayout):
         self.signal_responses = {
             "footprint": self.move_to
         }
-        self.posx = dp(50)
-        self.posy = dp(200)
+        self.posx = dp(0)
+        self.posy = dp(0)
         self.sizes = (dp(345/5), dp(500/5))
         self.manage_count = 0
         self.nearest = None
