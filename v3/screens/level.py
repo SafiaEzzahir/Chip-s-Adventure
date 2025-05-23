@@ -14,11 +14,13 @@ class LevelScreen(Screen):
         self.chip = Chip(self)
         self.backround = None
 
-        self.signal_types = ["corn", "footprint"]
+        self.signal_types = ["corn", "footprint", "phonebox"]
         self.signals = []
         self.corns = []
         self.footprints_used = False
         self.footprints = None
+
+        self.init_phoneboxes()
 
         self.backroundcol = get_color_from_hex("#FFC184")
         self.bpwidth = dp(400)
@@ -30,6 +32,17 @@ class LevelScreen(Screen):
         self.current_signal = None
         
         self.backpackback = None
+
+    def init_phoneboxes(self):
+        from signals import PhoneBox
+        box1 = (0, 0)
+        box2 = (120, 0)
+        box3 = (400, 0)
+        self.phoneboxes_positions = [box1, box2, box3]
+        self.phoneboxes = []
+        for box in self.phoneboxes_positions:
+            self.phoneboxes.append(PhoneBox(box))
+            print("box")
 
     def update_backpack(self):
         with self.canvas:
@@ -46,6 +59,10 @@ class LevelScreen(Screen):
             self.backround = Rectangle(size=(self.width, self.height))
             Color(*get_color_from_hex("6E514A"))
     
+    def update_phoneboxes(self):
+        for box in self.phoneboxes:
+            self.add_widget(box.update())
+
     def on_touch_up(self, touch):
         from signals import Corn, Footprint
         if int(touch.x) < self.bppos[0] or int(touch.y) > self.bppos[1]+self.backpack.sizes[1]:
@@ -80,6 +97,8 @@ class LevelScreen(Screen):
         
         if self.footprints != None:
             self.add_widget(self.footprints.update())
+
+        self.update_phoneboxes()
         
         for corn in self.corns:
             c = corn.update((self.bppos[0], self.bppos[1]+self.bpheight))

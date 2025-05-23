@@ -1,6 +1,7 @@
 from kivy.uix.image import Image
 from kivy.metrics import dp
 from kivy.uix.floatlayout import FloatLayout
+from kivy.core.audio import SoundLoader
 
 class Corn():
     def __init__(self, posx, posy):
@@ -52,3 +53,14 @@ class Footprint():
             return self.trackdown()
         elif self.mode == "trackfinished":
             return self.trackfinished()
+        
+class PhoneBox():
+    def __init__(self, pos):
+        self.pos = pos
+        print(self.pos)
+        self.image = "assets/phonebox.png"
+        self.ring = SoundLoader.load("assets/phonering.wav")
+
+    def update(self):
+        return Image(source=self.image, pos=self.pos, size=(dp(194), dp(500)), size_hint=(None, None))
+

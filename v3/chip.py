@@ -17,7 +17,7 @@ class Chip(FloatLayout):
         }
         self.posx = dp(50)
         self.posy = dp(200)
-        self.sizes = (dp(345/2), dp(500/2))
+        self.sizes = (dp(345/5), dp(500/5))
         self.manage_count = 0
         self.nearest = None
         self.signal_to_remove = None
