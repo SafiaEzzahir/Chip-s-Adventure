@@ -2,6 +2,9 @@ from kivy.uix.image import Image
 from kivy.metrics import dp
 from kivy.uix.floatlayout import FloatLayout
 from kivy.core.audio import SoundLoader
+from kivy.graphics import PushMatrix, PopMatrix, Rotate
+from kivy.animation import Animation
+from kivy.uix.widget import Widget
 
 class Corn():
     def __init__(self, posx, posy):
@@ -57,13 +60,29 @@ class Footprint():
 class PhoneBox():
     def __init__(self, pos):
         self.pos = pos
-        self.image = "assets/phonebox.png"
+        self.widget = Widget()
+        self.image = Image(source="assets/phonebox.png", pos=self.pos, size=(dp(194), dp(500)), size_hint=(None, None))
         self.ring = SoundLoader.load("assets/phonering.wav")
         self.ringing = False
+        self.widget.add_widget(self.image)
+
+        with self.image.canvas.before:
+            PushMatrix()
+            self.rotator = Rotate(angle=0, origin=self.image.center)
+        with self.image.canvas.after:
+            PopMatrix()
+
+    def ringing_image(self):
+        self.rotator.origin = self.image.center
+        anim = Animation(angle=10, duration=0.1) + Animation(angle=-10, duration=0.1)
+        anim.repeat = True
+        anim.start(self.rotator)
+        return self.widget
 
     def update(self):
         if self.ringing == True:
             self.ring.play()
             self.ringing = False
-        return Image(source=self.image, pos=self.pos, size=(dp(194), dp(500)), size_hint=(None, None))
+            return self.ringing_image()
+        return self.widget
 

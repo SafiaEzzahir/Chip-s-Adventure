@@ -3,7 +3,6 @@ from kivy.graphics.vertex_instructions import Rectangle
 from kivy.graphics.context_instructions import Color
 from kivy.utils import get_color_from_hex
 from kivy.metrics import dp
-from kivy.uix.button import Button
 
 class LevelScreen(Screen):
     def __init__(self, **kwargs):
@@ -60,7 +59,11 @@ class LevelScreen(Screen):
     
     def update_phoneboxes(self):
         for box in self.phoneboxes:
-            self.add_widget(box.update())
+            b = box.update()
+            if b:
+                if b.parent:
+                    b.parent.remove_widget(b)
+                self.add_widget(b)
 
     def on_touch_up(self, touch):
         from signals import Corn, Footprint
