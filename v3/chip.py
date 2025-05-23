@@ -3,15 +3,13 @@ from kivy.graphics.vertex_instructions import Rectangle
 from kivy.uix.image import Image
 from kivy.metrics import dp
 from kivy.vector import Vector
-from kivy.uix.floatlayout import FloatLayout
 
-class Chip(FloatLayout):
-    def __init__(self, screen, **kwargs):
+class Chip(Image):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.state = "idle"
         self.target = None
         self.speed = 10
-        self.screen = screen
         self.signal_responses = {
             "footprint": self.move_to
         }
@@ -22,17 +20,23 @@ class Chip(FloatLayout):
         self.nearest = None
         self.signal_to_remove = None
 
+        #self.image = Image(source="assets/chipright.png", size_hint=(None, None), size=self.sizes, pos=(self.posx, self.posy))
+        self.source = "assets/chipright.png"
+        self.size_hint = (None, None)
+        self.size = self.sizes
+        self.pos = (self.posx, self.posy)
+
     def move_to(self, signal, signals, target_posx, target_posy):
-        self.posx_center = self.posx+self.sizes[0]
-        self.posy_center = self.posy+self.sizes[1]/2
+        self.posx_center = self.pos[0]+self.sizes[0]
+        self.posy_center = self.pos[1]+self.sizes[1]/2
         dx = target_posx - self.posx_center
         dy = target_posy - self.posy_center
         dist = (dx**2 + dy**2) ** 0.5
 
         if dist < self.speed:
         # Already at the target
-            self.posx = target_posx - self.sizes[0]
-            self.posy = target_posy - self.sizes[1]/2
+            self.pos[0] = target_posx - self.sizes[0]
+            self.pos[1] = target_posy - self.sizes[1]/2
             self.state = "arrived"
             if signal in signals:
                 self.signal_to_remove = signal
@@ -41,14 +45,8 @@ class Chip(FloatLayout):
         step_x = dx / dist * self.speed
         step_y = dy / dist * self.speed
         # Update position
-        self.posx = self.posx + step_x
-        self.posy = self.posy + step_y
-
-    def get_chip_pic(self):
-        return Image(source="assets/chipright.png", size_hint=(None, None), size=self.sizes, pos=(self.posx, self.posy))
-
-    def updategraphics(self):
-        pass
+        self.pos[0] = self.pos[0] + step_x
+        self.pos[1] = self.pos[1] + step_y
 
     def distance_to(self, posx, posy):
         return Vector((self.pos[0], self.pos[1]+self.sizes[1]/2)).distance((posx, posy))
@@ -75,4 +73,3 @@ class Chip(FloatLayout):
 
     def update(self, signals):
         self.update_state(signals)
-        self.updategraphics()

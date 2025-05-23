@@ -10,7 +10,7 @@ class LevelScreen(Screen):
         from backpack import Backpack
         super().__init__(**kwargs)
         self.name = "level"
-        self.chip = Chip(self)
+        self.chip = Chip()
         self.backround = None
 
         self.signal_types = ["corn", "footprint", "phonebox"]
@@ -32,6 +32,9 @@ class LevelScreen(Screen):
         
         self.backpackback = None
 
+        self.init_graphics()
+        self.add_widget(self.chip)
+
     def init_phoneboxes(self):
         from signals import PhoneBox
         box1 = (0, 0)
@@ -51,11 +54,14 @@ class LevelScreen(Screen):
             self.backpackback = Rectangle(size=(self.bpwidth, self.bpheight), pos=(self.bppos))
             self.backpack.update_graphics(self.bppos)
 
-    def update_graphics(self):
+    def init_graphics(self):
         with self.canvas:
             Color(*self.backroundcol)
             self.backround = Rectangle(size=(self.width, self.height))
             Color(*get_color_from_hex("6E514A"))
+
+    def update_graphics(self):
+        self.backround.size = (self.width, self.height)
     
     def update_phoneboxes(self):
         for box in self.phoneboxes:
@@ -99,7 +105,6 @@ class LevelScreen(Screen):
 
     def update(self):
         self.update_graphics()
-        
         if self.footprints != None:
             self.add_widget(self.footprints.update())
 
@@ -122,8 +127,6 @@ class LevelScreen(Screen):
         self.current_allowed_signals["corn"] = 4-len(self.corns)
             
         self.chip.update(self.signals)
-        #print(self.corns)
-        self.add_widget(self.chip.get_chip_pic())
         self.update_backpack()
 
     def is_changed(self):
