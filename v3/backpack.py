@@ -20,7 +20,7 @@ class Backpack():
         self.footprint_layout.add_widget(self.footprint_img)
         self.footprint_layout.add_widget(Label(text=str(allowed_dict["footprints"]), size_hint=(.1, 1)))
 
-        self.phone_img = Image(source="assets/corn.png")
+        self.phone_img = Image(source="assets/phoneicon.png")
         self.phone_layout = BoxLayout()
         self.phone_layout.add_widget(self.phone_img)
 
