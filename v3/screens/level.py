@@ -19,8 +19,6 @@ class LevelScreen(Screen):
         self.footprints_used = False
         self.footprints = None
 
-        self.init_phoneboxes()
-
         self.backroundcol = get_color_from_hex("#FFC184")
         self.bpwidth = dp(400)
         self.bpheight = dp(120)
@@ -33,6 +31,7 @@ class LevelScreen(Screen):
         self.backpackback = None
 
         self.init_graphics()
+        self.init_phoneboxes()
         self.add_widget(self.chip)
 
     def init_phoneboxes(self):
@@ -43,7 +42,9 @@ class LevelScreen(Screen):
         self.phoneboxes_positions = [box1, box2, box3]
         self.phoneboxes = []
         for box in self.phoneboxes_positions:
-            self.phoneboxes.append(PhoneBox(box))
+            pb = PhoneBox(box)
+            self.phoneboxes.append(pb)
+            self.add_widget(pb)
 
     def update_backpack(self):
         with self.canvas:
@@ -67,9 +68,8 @@ class LevelScreen(Screen):
         for box in self.phoneboxes:
             b = box.update()
             if b:
-                if b.parent:
-                    b.parent.remove_widget(b)
-                self.add_widget(b)
+                if b.parent == None:
+                    self.add_widget(b)
 
     def on_touch_up(self, touch):
         from signals import Corn, Footprint
@@ -113,14 +113,17 @@ class LevelScreen(Screen):
         for corn in self.corns:
             c = corn.update((self.bppos[0], self.bppos[1]+self.bpheight))
             if c != None:
-                self.add_widget(c)
+                if c.parent == None:
+                    self.add_widget(c)
             else:
                 self.corns.remove(corn)
                 self.signals.remove(corn)
+                self.remove_widget(corn)
 
         if self.chip.signal_to_remove != None:
             self.corns.remove(self.chip.signal_to_remove)
             self.signals.remove(self.chip.signal_to_remove)
+            self.remove_widget(self.chip.signal_to_remove)
             self.chip.signal_to_remove = None
             #print(self.corns)
         
