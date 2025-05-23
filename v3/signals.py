@@ -65,6 +65,7 @@ class PhoneBox():
         self.ring = SoundLoader.load("assets/phonering.wav")
         self.ringing = False
         self.widget.add_widget(self.image)
+        self.ringing_count = 0
 
         with self.image.canvas.before:
             PushMatrix()
@@ -73,9 +74,9 @@ class PhoneBox():
             PopMatrix()
 
     def ringing_image(self):
-        self.rotator.origin = self.image.center
-        anim = Animation(angle=10, duration=0.1) + Animation(angle=-10, duration=0.1)
-        anim.repeat = True
+        anim = Animation(angle=0, duration=0.1)
+        for i in range(0, 4):
+            anim += Animation(angle=5, duration=0.05) + Animation(angle=10, duration=0.01) + Animation(angle=0, duration=0.025) + Animation(angle=-5, duration=0.05) + Animation(angle=-10, duration=0.01) + Animation(angle=0, duration=0.025)
         anim.start(self.rotator)
         return self.widget
 
