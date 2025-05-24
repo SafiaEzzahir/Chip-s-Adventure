@@ -10,9 +10,6 @@ class Chip(Image):
         self.state = "idle"
         self.target = None
         self.speed = 10
-        self.signal_responses = {
-            "footprint": self.move_to
-        }
         self.posx = dp(0)
         self.posy = dp(0)
         self.sizes = (dp(345/5), dp(500/5))
