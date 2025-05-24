@@ -35,31 +35,42 @@ class Footprint(FloatLayout):
         self.type = "footprint"
         self.mode = "footdown"
         self.position = position
+        self.second_position = None
         self.sizes = (dp(50), dp(50))
-        self.second_position = position
+
+        self.has_first_foot = False
+        self.has_second_foot = False
+
+    def check_if_done(self):
+        if self.mode == "trackfinished":
+            # if the track is finished, return True
+            return True
 
     def footdown(self):
-        self.mode = "shoesdown"
-        self.add_widget(Image(size_hint=(None, None), size=(self.sizes), source="assets/footprints.png", pos=self.position))
+        # check if the first footprint is already down
+        if not self.has_first_foot:
+            self.add_widget(Image(size_hint=(None, None), size=self.sizes, source="assets/footprints.png", pos=self.position))
+            self.has_first_foot = True
+            self.mode = "shoesdown"
 
     def shoesdown(self):
-        self.add_widget(Image(size_hint=(None, None), size=(self.sizes), source="assets/footprints.png", pos=self.second_position))
+        if self.second_position and not self.has_second_foot: # if second_position exists and second footprint is not down
+            self.add_widget(Image(size_hint=(None, None), size=self.sizes, source="assets/footprints.png", pos=self.second_position))
+            self.has_second_foot = True
+            self.mode = "trackdown"
 
     def trackdown(self):
-        pass
-
-    def trackfinished(self):
-        pass
+        # ready for drawing a path between the two
+        self.mode = "trackfinished"
 
     def update(self):
         if self.mode == "footdown":
             self.footdown()
+            return 
         elif self.mode == "shoesdown":
             self.shoesdown()
         elif self.mode == "trackdown":
             self.trackdown()
-        elif self.mode == "trackfinished":
-            self.trackfinished()
         
 class PhoneBox(Widget):
     def __init__(self, pos, **kwargs):

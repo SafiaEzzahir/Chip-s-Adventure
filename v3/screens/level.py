@@ -80,11 +80,10 @@ class LevelScreen(Screen):
                     self.add_widget(self.footprints)
                     self.footprints_used = True
                     self.current_allowed_signals["footprints"] = 0
+                    self.footprints.update()  # <-- make sure first footprint is shown
                 else:
-                    if self.footprints.mode == "shoesdown":
-                        self.footprints.second_position = (touch.x, touch.y)
-                    elif self.footprints.mode == "trackfinished":
-                        self.current_signal = None
+                    self.footprints.second_position = (touch.x, touch.y)
+                    self.footprints.update()  # <-- triggers second footprint to appear
 
         else:
             #click was in the backpack, now get which signal was clicked
@@ -100,6 +99,8 @@ class LevelScreen(Screen):
         self.update_graphics()
         if self.footprints != None:
             self.footprints.update()
+            if self.footprints.check_if_done() and self.current_signal == "footprint":
+                self.current_signal = None
 
         self.update_phoneboxes()
         
