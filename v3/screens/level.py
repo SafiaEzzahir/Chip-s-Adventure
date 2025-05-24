@@ -71,8 +71,10 @@ class LevelScreen(Screen):
                 if len(self.corns) < self.allowed_signals["corn"]:
                     #are there any corns left to place? if so, add a corn (below)
                     current_corn = Corn(touch.x, touch.y)
+                    self.add_widget(current_corn)
                     self.corns.append(current_corn)
                     self.signals.append(current_corn)
+                    self.current_allowed_signals["corn"] -= 1
 
             elif self.current_signal == "footprint":
                 if self.footprints_used == False:
@@ -103,16 +105,6 @@ class LevelScreen(Screen):
                 self.current_signal = None
 
         self.update_phoneboxes()
-        
-        for corn in self.corns:
-            c = corn.update((self.bppos[0], self.bppos[1]+self.bpheight))
-            if c != None:
-                if c.parent == None:
-                    self.add_widget(c)
-            else:
-                self.corns.remove(corn)
-                self.signals.remove(corn)
-                self.remove_widget(corn)
 
         if self.chip.signal_to_remove != None:
             self.corns.remove(self.chip.signal_to_remove)
@@ -120,11 +112,11 @@ class LevelScreen(Screen):
             self.remove_widget(self.chip.signal_to_remove)
             self.chip.signal_to_remove = None
             #print(self.corns)
-        
-        self.current_allowed_signals["corn"] = 4-len(self.corns)
             
         self.chip.update(self.signals)
         self.backpack.update(self.current_allowed_signals)
+        for corn in self.corns:
+            corn.update()
 
     def is_changed(self):
         return "level"

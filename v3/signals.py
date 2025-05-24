@@ -20,14 +20,8 @@ class Corn(Image):
         self.source = "assets/corn.png"
         self.size = (self.sizes, self.sizes)
 
-    def check_pos(self, bppos):
-        if self.poss[0]>=bppos[0] and self.poss[1]<=bppos[1]:
-            return None
-        else:
-            return self
-
-    def update(self, bppos):
-        return self.check_pos(bppos)
+    def update(self):
+        self.pos = self.poss
 
 class Footprint(FloatLayout):
     def __init__(self, position, **kwargs):
