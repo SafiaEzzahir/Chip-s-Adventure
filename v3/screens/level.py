@@ -7,7 +7,6 @@ from kivy.metrics import dp
 class LevelScreen(Screen):
     def __init__(self, **kwargs):
         from chip import Chip
-        from backpack import Backpack
         super().__init__(**kwargs)
         self.name = "level"
         self.chip = Chip()
@@ -28,11 +27,13 @@ class LevelScreen(Screen):
         self.current_allowed_signals = {"corn": 4, "footprints": 1}
         self.current_signal = None
         
-        self.backpackback = None
+        from backpack import Backpack
+        self.backpack = Backpack(self.current_allowed_signals, (self.bpwidth, self.bpheight), self.bppos, self.bpwidth, self.bpheight, self)
 
         self.init_graphics()
         self.init_phoneboxes()
         self.add_widget(self.chip)
+        self.add_widget(self.backpack)
 
     def init_phoneboxes(self):
         from signals import PhoneBox
@@ -45,15 +46,6 @@ class LevelScreen(Screen):
             pb = PhoneBox(box)
             self.phoneboxes.append(pb)
             self.add_widget(pb)
-
-    def update_backpack(self):
-        with self.canvas:
-            from backpack import Backpack
-            self.backpack = Backpack(self.current_allowed_signals, (self.bpwidth, self.bpheight))
-            Color(*get_color_from_hex("6E514A"))
-            self.bppos = (self.width-self.bpwidth-dp(5), dp(5))
-            self.backpackback = Rectangle(size=(self.bpwidth, self.bpheight), pos=(self.bppos))
-            self.backpack.update_graphics(self.bppos)
 
     def init_graphics(self):
         with self.canvas:
@@ -73,7 +65,7 @@ class LevelScreen(Screen):
 
     def on_touch_up(self, touch):
         from signals import Corn, Footprint
-        if int(touch.x) < self.bppos[0] or int(touch.y) > self.bppos[1]+self.backpack.sizes[1]:
+        if int(touch.x) < self.bppos[0] or int(touch.y) > self.bppos[1]+self.backpack.size[1]:
             #was the click outside of the backpack? this is if not
             if self.current_signal == "corn":
                 if len(self.corns) < self.allowed_signals["corn"]:
@@ -85,6 +77,7 @@ class LevelScreen(Screen):
             elif self.current_signal == "footprint":
                 if self.footprints_used == False:
                     self.footprints = Footprint((touch.x, touch.y))
+                    self.add_widget(self.footprints)
                     self.footprints_used = True
                     self.current_allowed_signals["footprints"] = 0
                 else:
@@ -106,7 +99,7 @@ class LevelScreen(Screen):
     def update(self):
         self.update_graphics()
         if self.footprints != None:
-            self.add_widget(self.footprints.update())
+            self.footprints.update()
 
         self.update_phoneboxes()
         
@@ -130,7 +123,7 @@ class LevelScreen(Screen):
         self.current_allowed_signals["corn"] = 4-len(self.corns)
             
         self.chip.update(self.signals)
-        self.update_backpack()
+        self.backpack.update(self.current_allowed_signals)
 
     def is_changed(self):
         return "level"

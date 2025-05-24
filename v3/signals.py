@@ -29,8 +29,9 @@ class Corn(Image):
     def update(self, bppos):
         return self.check_pos(bppos)
 
-class Footprint():
-    def __init__(self, position):
+class Footprint(FloatLayout):
+    def __init__(self, position, **kwargs):
+        super().__init__(**kwargs)
         self.type = "footprint"
         self.mode = "footdown"
         self.position = position
@@ -39,13 +40,10 @@ class Footprint():
 
     def footdown(self):
         self.mode = "shoesdown"
-        return Image(size_hint=(None, None), size=(self.sizes), source="assets/footprints.png", pos=self.position)
+        self.add_widget(Image(size_hint=(None, None), size=(self.sizes), source="assets/footprints.png", pos=self.position))
 
     def shoesdown(self):
-        layout = FloatLayout()
-        layout.add_widget(self.footdown())
-        layout.add_widget(Image(size_hint=(None, None), size=(self.sizes), source="assets/footprints.png", pos=self.second_position))
-        return layout
+        self.add_widget(Image(size_hint=(None, None), size=(self.sizes), source="assets/footprints.png", pos=self.second_position))
 
     def trackdown(self):
         pass
@@ -55,13 +53,13 @@ class Footprint():
 
     def update(self):
         if self.mode == "footdown":
-            return self.footdown()
+            self.footdown()
         elif self.mode == "shoesdown":
-            return self.shoesdown()
+            self.shoesdown()
         elif self.mode == "trackdown":
-            return self.trackdown()
+            self.trackdown()
         elif self.mode == "trackfinished":
-            return self.trackfinished()
+            self.trackfinished()
         
 class PhoneBox(Widget):
     def __init__(self, pos, **kwargs):
