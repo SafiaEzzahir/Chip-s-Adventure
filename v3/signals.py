@@ -41,6 +41,9 @@ class Footprint(FloatLayout):
         self.has_first_foot = False
         self.has_second_foot = False
 
+        self.lastx = 0
+        self.lasty = 0
+
     def check_if_done(self):
         if self.mode == "trackfinished":
             # if the track is finished, return True
@@ -60,7 +63,19 @@ class Footprint(FloatLayout):
             self.mode = "trackdown"
 
     def trackdown(self):
-        # ready for drawing a path between the two
+        # Calculate center points for start and end
+        x1, y1 = self.position[0] + self.sizes[0] / 2, self.position[1] + self.sizes[1] / 2
+        x2, y2 = self.second_position[0] + self.sizes[0] / 2, self.second_position[1] + self.sizes[1] / 2
+        dx = x2 - x1
+        dy = y2 - y1
+        distance = (dx**2 + dy**2) ** 0.5
+        step_size = self.sizes[0]  # use width, or make this a parameter
+        steps = max(1, int(distance // step_size))
+        for i in range(1, steps + 1):
+            t = i / (steps + 1)
+            x = x1 + dx * t
+            y = y1 + dy * t
+            self.add_widget(Image(size_hint=(None, None), size=self.sizes, source="assets/footprints.png", pos=(x - self.sizes[0] / 2, y - self.sizes[1] / 2)))
         self.mode = "trackfinished"
 
     def update(self):
