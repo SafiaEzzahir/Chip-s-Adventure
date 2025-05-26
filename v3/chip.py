@@ -18,7 +18,7 @@ class Chip(Image):
         self.signal_to_remove = None
 
         #self.image = Image(source="assets/chipright.png", size_hint=(None, None), size=self.sizes, pos=(self.posx, self.posy))
-        self.source = "assets/chipright.png"
+        self.source = "assets/chip.png"
         self.size_hint = (None, None)
         self.size = self.sizes
         self.pos = (self.posx, self.posy)
