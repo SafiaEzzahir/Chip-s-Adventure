@@ -7,6 +7,7 @@ from kivy.metrics import dp
 class LevelScreen(Screen):
     def __init__(self, **kwargs):
         from chip import Chip
+        from characters.fox import Fox
         super().__init__(**kwargs)
         self.name = "level"
         self.chip = Chip()
@@ -34,13 +35,14 @@ class LevelScreen(Screen):
         self.init_phoneboxes()
         self.add_widget(self.chip)
         self.add_widget(self.backpack)
+        self.add_widget(Fox((0, 0)))
 
     def init_phoneboxes(self):
         from signals import PhoneBox
         box1 = (0, 0)
         box2 = (120, 0)
         box3 = (400, 0)
-        self.phoneboxes_positions = [box1, box2, box3]
+        self.phoneboxes_positions = [box1]
         self.phoneboxes = []
         for box in self.phoneboxes_positions:
             pb = PhoneBox(box)
@@ -68,7 +70,7 @@ class LevelScreen(Screen):
         if int(touch.x) < self.bppos[0] or int(touch.y) > self.bppos[1]+self.backpack.size[1]:
             #was the click outside of the backpack? this is if not
             if self.current_signal == "corn":
-                if len(self.corns) < self.allowed_signals["corn"]:
+                if len(self.corns) < self.allowed_signals["corn"] and self.current_allowed_signals["corn"] > 0:
                     #are there any corns left to place? if so, add a corn (below)
                     current_corn = Corn(touch.x, touch.y)
                     self.add_widget(current_corn)
