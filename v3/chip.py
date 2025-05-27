@@ -3,8 +3,9 @@ from kivy.graphics.vertex_instructions import Rectangle
 from kivy.uix.image import Image
 from kivy.metrics import dp
 from kivy.vector import Vector
+from kivy.graphics.context_instructions import Color
 
-class Chip(Image):
+class Chip(Widget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.state = "idle"
@@ -12,16 +13,18 @@ class Chip(Image):
         self.speed = 10
         self.posx = dp(0)
         self.posy = dp(0)
-        self.sizes = (dp(345/5), dp(500/5))
+        self.sizes = (dp(100), dp(100))
         self.manage_count = 0
         self.nearest = None
         self.signal_to_remove = None
 
-        #self.image = Image(source="assets/chipright.png", size_hint=(None, None), size=self.sizes, pos=(self.posx, self.posy))
-        self.source = "assets/chip.png"
         self.size_hint = (None, None)
         self.size = self.sizes
         self.pos = (self.posx, self.posy)
+
+        with self.canvas:
+            Color(1, 1, 1, 1)
+            self.image = Rectangle(source="assets/chip.png", size=self.sizes, pos=self.pos)
 
     def move_to(self, signal, signals, target_posx, target_posy):
         self.posx_center = self.pos[0]+self.sizes[0]
@@ -44,6 +47,7 @@ class Chip(Image):
         # Update position
         self.pos[0] = self.pos[0] + step_x
         self.pos[1] = self.pos[1] + step_y
+        self.image.pos = self.pos
 
     def distance_to(self, posx, posy):
         return Vector((self.pos[0], self.pos[1]+self.sizes[1]/2)).distance((posx, posy))

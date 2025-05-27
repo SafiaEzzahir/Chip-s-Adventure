@@ -33,9 +33,9 @@ class LevelScreen(Screen):
 
         self.init_graphics()
         self.init_phoneboxes()
+        self.add_widget(Fox((0, 0)))
         self.add_widget(self.chip)
         self.add_widget(self.backpack)
-        self.add_widget(Fox((0, 0)))
 
     def init_phoneboxes(self):
         from signals import PhoneBox

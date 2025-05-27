@@ -5,6 +5,8 @@ from kivy.core.audio import SoundLoader
 from kivy.graphics import PushMatrix, PopMatrix, Rotate
 from kivy.animation import Animation
 from kivy.uix.widget import Widget
+from kivy.graphics.vertex_instructions import Rectangle
+from kivy.graphics.context_instructions import Color
 
 class Corn(Image):
     def __init__(self, posx, posy, **kwargs):
@@ -84,20 +86,23 @@ class Footprint(FloatLayout):
 class PhoneBox(Widget):
     def __init__(self, pos, **kwargs):
         super().__init__(**kwargs)
-        self.pos = pos
-        self.image = Image(source="assets/phonebox.png", pos=self.pos, size=(dp(194), dp(500)), size_hint=(None, None))
+        self.pos = (350, 200)
         self.ring = SoundLoader.load("assets/phonering.wav")
         self.ringing = False
-        self.add_widget(self.image)
         self.ringing_count = 0
 
-        with self.image.canvas.before:
+        with self.canvas:
+            Color(1, 1, 1, 1)
+            self.image = Rectangle(source="assets/phoneboxtop.png", pos=self.pos, size=(dp(500/5), dp(500/5)))
+        with self.canvas.before:
             PushMatrix()
-            self.rotator = Rotate(angle=0, origin=self.image.center)
-        with self.image.canvas.after:
+            self.rotator = Rotate(angle=0, origin=self.center)
+        with self.canvas.after:
             PopMatrix()
 
     def ringing_image(self):
+        self.size = self.image.size
+        self.rotator.origin = self.center
         anim = Animation(angle=0, duration=0.1)
         for i in range(0, 4):
             anim += Animation(angle=5, duration=0.05) + Animation(angle=10, duration=0.01) + Animation(angle=0, duration=0.025) + Animation(angle=-5, duration=0.05) + Animation(angle=-10, duration=0.01) + Animation(angle=0, duration=0.025)
