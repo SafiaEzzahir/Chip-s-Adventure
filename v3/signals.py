@@ -90,6 +90,10 @@ class PhoneBox(Widget):
         self.ring = SoundLoader.load("assets/phonering.wav")
         self.ringing = False
         self.ringing_count = 0
+        self.type = "phonebox"
+
+        self.posx = self.pos[0]
+        self.posy = self.pos[1]
 
         with self.canvas:
             Color(1, 1, 1, 1)

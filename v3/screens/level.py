@@ -13,6 +13,10 @@ class LevelScreen(Screen):
         self.chip = Chip()
         self.backround = None
 
+        self.characters = []
+        self.fox = Fox((dp(300), dp(250)), self)
+        self.characters.append(self.fox)
+
         self.signal_types = ["corn", "footprint", "phonebox"]
         self.signals = []
         self.corns = []
@@ -33,7 +37,8 @@ class LevelScreen(Screen):
 
         self.init_graphics()
         self.init_phoneboxes()
-        self.add_widget(Fox((0, 0)))
+        for char in self.characters:
+            self.add_widget(char)
         self.add_widget(self.chip)
         self.add_widget(self.backpack)
 
@@ -96,6 +101,7 @@ class LevelScreen(Screen):
                 if self.current_signal == "phonebox":
                     for box in self.phoneboxes:
                         box.ringing = True
+                        self.signals.append(box)
 
         return super().on_touch_up(touch)
 
@@ -107,13 +113,15 @@ class LevelScreen(Screen):
                 self.current_signal = None
 
         self.update_phoneboxes()
+        for char in self.characters:
+            char.update()
 
         if self.chip.signal_to_remove != None:
-            self.corns.remove(self.chip.signal_to_remove)
+            if self.chip.signal_to_remove.type == "corn":
+                self.corns.remove(self.chip.signal_to_remove)
+                self.remove_widget(self.chip.signal_to_remove)    
             self.signals.remove(self.chip.signal_to_remove)
-            self.remove_widget(self.chip.signal_to_remove)
             self.chip.signal_to_remove = None
-            #print(self.corns)
             
         self.chip.update(self.signals)
         self.backpack.update(self.current_allowed_signals)
