@@ -8,6 +8,7 @@ class LevelScreen(Screen):
     def __init__(self, **kwargs):
         from chip import Chip
         from characters.fox import Fox
+        from signals import Footprint
         super().__init__(**kwargs)
         self.name = "level"
         self.chip = Chip()
@@ -21,7 +22,7 @@ class LevelScreen(Screen):
         self.signals = []
         self.corns = []
         self.footprints_used = False
-        self.footprints = None
+        self.footprints = Footprint()
 
         self.backroundcol = get_color_from_hex("#FFC184")
         self.bpwidth = dp(400)
@@ -36,6 +37,7 @@ class LevelScreen(Screen):
         self.backpack = Backpack(self.current_allowed_signals, (self.bpwidth, self.bpheight), self.bppos, self.bpwidth, self.bpheight, self)
 
         self.init_graphics()
+        self.add_widget(self.footprints)
         self.init_phoneboxes()
         for char in self.characters:
             self.add_widget(char)
@@ -71,7 +73,7 @@ class LevelScreen(Screen):
                     self.add_widget(b)
 
     def on_touch_up(self, touch):
-        from signals import Corn, Footprint
+        from signals import Corn
         if int(touch.x) < self.bppos[0] or int(touch.y) > self.bppos[1]+self.backpack.size[1]:
             #was the click outside of the backpack? this is if not
             if self.current_signal == "corn":
@@ -85,14 +87,14 @@ class LevelScreen(Screen):
 
             elif self.current_signal == "footprint":
                 if self.footprints_used == False:
-                    self.footprints = Footprint((touch.x, touch.y))
-                    self.add_widget(self.footprints)
+                    self.footprints.init((touch.x, touch.y))
                     self.footprints_used = True
                     self.current_allowed_signals["footprints"] = 0
                     self.footprints.update()  # <-- make sure first footprint is shown
                 else:
                     self.footprints.second_position = (touch.x, touch.y)
                     self.footprints.update()  # <-- triggers second footprint to appear
+                    self.signals.append(self.footprints)
 
         else:
             #click was in the backpack, now get which signal was clicked

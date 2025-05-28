@@ -26,11 +26,15 @@ class Corn(Image):
         self.pos = self.poss
 
 class Footprint(FloatLayout):
-    def __init__(self, position, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.type = "footprint"
-        self.mode = "footdown"
+        self.mode = "empty"
+
+    def init(self, position):
         self.position = position
+        self.posx = position[0]
+        self.posy = position[1]
         self.second_position = None
         self.sizes = (dp(50), dp(50))
 
@@ -39,6 +43,8 @@ class Footprint(FloatLayout):
 
         self.lastx = 0
         self.lasty = 0
+
+        self.mode = "footdown"
 
     def check_if_done(self):
         if self.mode == "trackfinished":
@@ -57,6 +63,8 @@ class Footprint(FloatLayout):
             self.add_widget(Image(size_hint=(None, None), size=self.sizes, source="assets/footprints.png", pos=self.second_position))
             self.has_second_foot = True
             self.mode = "trackdown"
+            self.second_posx = self.second_position[0]
+            self.second_posy = self.second_position[1]
 
     def trackdown(self):
         # Calculate center points for start and end
@@ -119,4 +127,3 @@ class PhoneBox(Widget):
             self.ringing = False
             return self.ringing_image()
         return self
-

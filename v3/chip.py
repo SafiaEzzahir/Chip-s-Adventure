@@ -40,7 +40,10 @@ class Chip(Widget):
             self.state = "arrived"
             if signal in signals:
                 self.signal_to_remove = signal
+                if signal.type == "footprint":
+                    self.state = "following footsteps"
             return
+
         # Normalize direction and step
         step_x = dx / dist * self.speed
         step_y = dy / dist * self.speed
@@ -60,17 +63,35 @@ class Chip(Widget):
             if dist is not None and dist < shortest_distance:
                 shortest_distance = dist
                 nearest_signal = signal
+                self.state = "moving"
         return nearest_signal
     
+    def follow_footsteps(self):
+        dx = self.nearest.second_posx - self.pos[0]
+        dy = self.nearest.second_posy - self.pos[1]
+        dist = (dx**2 + dy**2) ** 0.5 #pythagoras to find diagonal
+
+        if dist < self.speed:
+            self.image.pos = self.nearest.second_position
+            self.state = "arrived"
+            return
+
+        step_x = dx / dist * self.speed
+        step_y = dy / dist * self.speed
+
+        self.pos[0] = self.pos[0] + step_x
+        self.pos[1] = self.pos[1] + step_y
+        self.image.pos = self.pos
+    
     def update_state(self, signals):
-        if self.manage_count == 0:
-            self.nearest = self.find_nearest_signal(signals)
         if self.nearest:
-            self.move_to(self.nearest, signals, self.nearest.posx, self.nearest.posy)
-        if self.manage_count == 10:
-            self.manage_count = 0
+            if self.state in  ["moving", "arrived"]:
+                self.move_to(self.nearest, signals, self.nearest.posx, self.nearest.posy)
+            
+        if self.state == "following footsteps":
+            self.follow_footsteps()
         else:
-            self.manage_count += 1
+            self.nearest = self.find_nearest_signal(signals)
 
     def update(self, signals):
         self.update_state(signals)
