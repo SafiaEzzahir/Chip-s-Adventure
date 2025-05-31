@@ -80,6 +80,8 @@ class Footprint(FloatLayout):
         #calculate angle
         if dy != 0:
             a = degrees(atan(dx/dy))
+        else:
+            a = degrees(90)
 
         for i in range(1, steps + 1):
             t = i / (steps + 1)

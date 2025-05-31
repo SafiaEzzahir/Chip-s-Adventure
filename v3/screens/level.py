@@ -127,10 +127,11 @@ class LevelScreen(Screen):
         for key in self.current_allowed_signals:
             if self.current_allowed_signals[key] == 0:
                 count+=1
-        if count == len(self.current_allowed_signals) and self.signals==[] and self.winning_pos():
-            return True
-        else:
-            return False
+        if count == len(self.current_allowed_signals) and self.signals==[]:
+            if self.winning_pos():
+                self.current_level = "win"
+            else:
+                self.current_level = "lose"
 
     def update(self):
         self.update_graphics()
@@ -157,8 +158,7 @@ class LevelScreen(Screen):
         for corn in self.corns:
             corn.update()
 
-        if self.did_you_win() == True:
-            self.current_level = "win"
+        self.did_you_win()
 
     def is_changed(self):
         return self.current_level
