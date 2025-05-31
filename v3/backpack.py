@@ -6,6 +6,7 @@ from kivy.metrics import dp
 from kivy.graphics.context_instructions import Color
 from kivy.utils import get_color_from_hex
 from kivy.graphics import Rectangle
+from kivy.graphics import PushMatrix, PopMatrix, Rotate
 
 class Backpack(GridLayout):
     def __init__(self, allowed_dict, sizes, bppos, bpwidth, bpheight, screen, **kwargs):

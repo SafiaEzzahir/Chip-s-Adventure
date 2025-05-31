@@ -4,6 +4,8 @@ from kivy.uix.image import Image
 from kivy.metrics import dp
 from kivy.vector import Vector
 from kivy.graphics.context_instructions import Color
+from kivy.graphics import PushMatrix, PopMatrix, Rotate
+from math import atan2, degrees
 
 class Chip(Widget):
     def __init__(self, **kwargs):
@@ -22,35 +24,47 @@ class Chip(Widget):
         self.size = self.sizes
         self.pos = (self.posx, self.posy)
 
+        self.angle = 0
+        self.rot = Rotate()
+
         with self.canvas:
+            PushMatrix()
+            self.rot = Rotate(origin=self.center, angle=self.angle)
             Color(1, 1, 1, 1)
             self.image = Rectangle(source="assets/chip.png", size=self.sizes, pos=self.pos)
+            PopMatrix()
 
-    def move_to(self, signal, signals, target_posx, target_posy):
-        self.posx_center = self.pos[0]+self.sizes[0]
-        self.posy_center = self.pos[1]+self.sizes[1]/2
-        dx = target_posx - self.posx_center
-        dy = target_posy - self.posy_center
+    def move_towards(self, target_x, target_y):
+        center_x = self.pos[0] + self.sizes[0]
+        center_y = self.pos[1] + self.sizes[1] / 2
+
+        dx = target_x - center_x
+        dy = target_y - center_y
         dist = (dx**2 + dy**2) ** 0.5
 
         if dist < self.speed:
-        # Already at the target
-            self.pos[0] = target_posx - self.sizes[0]
-            self.pos[1] = target_posy - self.sizes[1]/2
+            self.pos[0] = target_x - self.sizes[0]
+            self.pos[1] = target_y - self.sizes[1] / 2
             self.state = "arrived"
-            if signal in signals:
-                self.signal_to_remove = signal
-                if signal.type == "footprint":
-                    self.state = "following footsteps"
             return
 
-        # Normalize direction and step
         step_x = dx / dist * self.speed
         step_y = dy / dist * self.speed
-        # Update position
-        self.pos[0] = self.pos[0] + step_x
-        self.pos[1] = self.pos[1] + step_y
+
+        self.pos[0] += step_x
+        self.pos[1] += step_y
         self.image.pos = self.pos
+
+        self.angle = degrees(atan2(dy, dx))
+        self.rot.angle = self.angle
+        self.rot.origin = self.center
+
+    def move_to(self, signal, signals, target_posx, target_posy):
+        self.move_towards(target_posx, target_posy)
+        if self.state == "arrived" and signal in signals:
+            self.signal_to_remove = signal
+            if signal.type == "footprint":
+                self.state = "following footsteps"
 
     def distance_to(self, posx, posy):
         return Vector((self.pos[0], self.pos[1]+self.sizes[1]/2)).distance((posx, posy))
@@ -67,21 +81,7 @@ class Chip(Widget):
         return nearest_signal
     
     def follow_footsteps(self):
-        dx = self.nearest.second_posx - self.pos[0]
-        dy = self.nearest.second_posy - self.pos[1]
-        dist = (dx**2 + dy**2) ** 0.5 #pythagoras to find diagonal
-
-        if dist < self.speed:
-            self.image.pos = self.nearest.second_position
-            self.state = "arrived"
-            return
-
-        step_x = dx / dist * self.speed
-        step_y = dy / dist * self.speed
-
-        self.pos[0] = self.pos[0] + step_x
-        self.pos[1] = self.pos[1] + step_y
-        self.image.pos = self.pos
+        self.move_towards(self.nearest.second_posx, self.nearest.second_posy)
     
     def update_state(self, signals):
         if self.nearest:
@@ -95,3 +95,6 @@ class Chip(Widget):
 
     def update(self, signals):
         self.update_state(signals)
+        self.rot.angle = self.angle
+        self.rot.origin = self.center
+        self.image.pos = self.pos
