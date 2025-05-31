@@ -11,6 +11,7 @@ class LevelScreen(Screen):
         from signals import Footprint
         super().__init__(**kwargs)
         self.name = "level"
+        self.current_level = "level"
         self.chip = Chip()
         self.backround = None
 
@@ -37,12 +38,18 @@ class LevelScreen(Screen):
         self.backpack = Backpack(self.current_allowed_signals, (self.bpwidth, self.bpheight), self.bppos, self.bpwidth, self.bpheight, self)
 
         self.init_graphics()
+        self.init_target()
         self.add_widget(self.footprints)
         self.init_phoneboxes()
         for char in self.characters:
             self.add_widget(char)
         self.add_widget(self.chip)
         self.add_widget(self.backpack)
+
+    def init_target(self):
+        with self.canvas:
+            Color(0, 1, 0, 1)
+            self.target = Rectangle(pos=(self.width-dp(60), self.height-dp(60)), size=(dp(50), dp(50)))
 
     def init_phoneboxes(self):
         from signals import PhoneBox
@@ -106,9 +113,29 @@ class LevelScreen(Screen):
                         self.signals.append(box)
 
         return super().on_touch_up(touch)
+    
+    def winning_pos(self):
+        x = self.chip.x + self.chip.width
+        y = self.chip.y + self.chip.height
+        if y >= self.target.pos[1] and x >= self.target.pos[0]:
+            return True
+        else:
+            return False
+
+    def did_you_win(self):
+        count = 0
+        for key in self.current_allowed_signals:
+            if self.current_allowed_signals[key] == 0:
+                count+=1
+        if count == len(self.current_allowed_signals) and self.signals==[] and self.winning_pos():
+            return True
+        else:
+            return False
 
     def update(self):
         self.update_graphics()
+        self.target.pos = (self.width-dp(60), self.height-dp(60))
+
         if self.footprints != None:
             self.footprints.update()
             if self.footprints.check_if_done() and self.current_signal == "footprint":
@@ -130,5 +157,8 @@ class LevelScreen(Screen):
         for corn in self.corns:
             corn.update()
 
+        if self.did_you_win() == True:
+            self.current_level = "win"
+
     def is_changed(self):
-        return "level"
+        return self.current_level

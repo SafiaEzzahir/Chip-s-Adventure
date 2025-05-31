@@ -11,16 +11,19 @@ class Screener(ScreenManager):
         from screens.level import LevelScreen
         from screens.cutscenes import CutsceneScreen
         from screens.settings import SettingsScreen
+        from screens.win import WinScreen
         from gamemanager import GameManager
         self.gamemanager = GameManager()
         self.menu = MenuScreen()
         self.level = LevelScreen()
         self.cutscene = CutsceneScreen()
         self.settings = SettingsScreen()
+        self.win = WinScreen()
         self.add_widget(self.menu)
         self.add_widget(self.level)
         self.add_widget(self.cutscene)
         self.add_widget(self.settings)
+        self.add_widget(self.win)
         self.current = "menu"
         Clock.schedule_interval(self.update, 1.0/20.0)
 

@@ -7,6 +7,7 @@ from kivy.animation import Animation
 from kivy.uix.widget import Widget
 from kivy.graphics.vertex_instructions import Rectangle
 from kivy.graphics.context_instructions import Color
+from math import atan, degrees
 
 class Corn(Image):
     def __init__(self, posx, posy, **kwargs):
@@ -75,11 +76,21 @@ class Footprint(FloatLayout):
         distance = (dx**2 + dy**2) ** 0.5
         step_size = self.sizes[0]  # use width, or make this a parameter
         steps = max(1, int(distance // step_size))
+
+        #calculate angle
+        if dy != 0:
+            a = degrees(atan(dx/dy))
+
         for i in range(1, steps + 1):
             t = i / (steps + 1)
             x = x1 + dx * t
             y = y1 + dy * t
-            self.add_widget(Image(size_hint=(None, None), size=self.sizes, source="assets/footprints.png", pos=(x - self.sizes[0] / 2, y - self.sizes[1] / 2)))
+            with self.canvas:
+                PushMatrix()
+                rotator = Rotate(angle = -a, origin = (x, y))
+                Color(1, 1, 1, 1)
+                Rectangle(size_hint=(None, None), size=self.sizes, source="assets/footprints.png", pos=(x - self.sizes[0] / 2, y - self.sizes[1] / 2))
+                PopMatrix()
         self.mode = "trackfinished"
 
     def update(self):
