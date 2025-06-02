@@ -24,6 +24,7 @@ class LevelScreen(Screen):
         self.corns = []
         self.footprints_used = False
         self.footprints = Footprint()
+        #self.signals.append(self.fox)
 
         self.backroundcol = get_color_from_hex("#FFC184")
         self.bpwidth = dp(400)
@@ -143,8 +144,11 @@ class LevelScreen(Screen):
                 self.current_signal = None
 
         self.update_phoneboxes()
+
         for char in self.characters:
             char.update()
+            if char.is_making_sound() and char not in self.signals:
+                self.signals.append(char)
 
         if self.chip.signal_to_remove != None:
             if self.chip.signal_to_remove.type == "corn":

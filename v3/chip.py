@@ -5,6 +5,7 @@ from kivy.metrics import dp
 from kivy.vector import Vector
 from kivy.graphics.context_instructions import Color
 from kivy.graphics import PushMatrix, PopMatrix, Rotate
+from kivy.core.audio import SoundLoader
 from math import atan2, degrees
 
 class Chip(Widget):
@@ -24,6 +25,8 @@ class Chip(Widget):
         self.size = self.sizes
         self.pos = (self.posx, self.posy)
 
+        self.init_sound()
+
         self.angle = 0
         self.rot = Rotate()
 
@@ -33,6 +36,12 @@ class Chip(Widget):
             Color(1, 1, 1, 1)
             self.image = Rectangle(source="assets/chip.png", size=self.sizes, pos=self.pos)
             PopMatrix()
+
+    def init_sound(self):
+        self.hungry = True
+        self.chirp = SoundLoader.load("v3/assets/chipchirp.wav")
+        self.sound_randomness = 20
+        self.sound_count = 0
 
     def move_towards(self, target_x, target_y):
         center_x = self.pos[0] + self.sizes[0]
@@ -82,7 +91,13 @@ class Chip(Widget):
     
     def follow_footsteps(self):
         self.move_towards(self.nearest.second_posx, self.nearest.second_posy)
-    
+
+    def make_sound(self):
+        self.sound_count += 1
+        if self.sound_count == self.sound_randomness:
+            self.chirp.play()
+            self.sound_count = 0
+
     def update_state(self, signals):
         if self.nearest:
             if self.state in  ["moving", "arrived"]:
@@ -98,3 +113,5 @@ class Chip(Widget):
         self.rot.angle = self.angle
         self.rot.origin = self.center
         self.image.pos = self.pos
+        if self.hungry:
+            self.make_sound()
