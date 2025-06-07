@@ -24,9 +24,10 @@ class Fox(Widget):
         self.init_sound()
         
     def init_sound(self):
-        self.growl = SoundLoader.load("v3/assets/foxgrowl.mp3")
+        self.growl = SoundLoader.load("assets/foxgrowl.mp3")
         self.sound_count = 0
         self.sound_randomness = 80
+        self.return_to_default_image = 15
 
     def where_is_chip(self):
         chip = self.screen.chip
@@ -48,8 +49,11 @@ class Fox(Widget):
     def make_sound(self):
         self.sound_count += 1
         if self.sound_count == self.sound_randomness:
+            self.image.source = "assets/foxgrowl.png"
             self.growl.play()
             self.sound_count = 0
+        elif self.sound_count == self.return_to_default_image:
+            self.image.source = "assets/fox.png"
 
     def is_making_sound(self):
         if self.sound_count == 0:
