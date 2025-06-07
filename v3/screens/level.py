@@ -8,7 +8,7 @@ class LevelScreen(Screen):
     def __init__(self, **kwargs):
         from chip import Chip
         from characters.fox import Fox
-        from signals import Footprint
+        from level_objects.signals import Footprint
         super().__init__(**kwargs)
         self.name = "level"
         self.current_level = "level"
@@ -35,7 +35,7 @@ class LevelScreen(Screen):
         self.current_allowed_signals = {"corn": 4, "footprints": 1}
         self.current_signal = None
         
-        from backpack import Backpack
+        from level_objects.backpack import Backpack
         self.backpack = Backpack(self.current_allowed_signals, (self.bpwidth, self.bpheight), self.bppos, self.bpwidth, self.bpheight, self)
 
         self.init_graphics()
@@ -53,7 +53,7 @@ class LevelScreen(Screen):
             self.target = Rectangle(pos=(self.width-dp(60), self.height-dp(60)), size=(dp(50), dp(50)))
 
     def init_phoneboxes(self):
-        from signals import PhoneBox
+        from level_objects.signals import PhoneBox
         box1 = (0, 0)
         box2 = (120, 0)
         box3 = (400, 0)
@@ -81,7 +81,7 @@ class LevelScreen(Screen):
                     self.add_widget(b)
 
     def on_touch_up(self, touch):
-        from signals import Corn
+        from level_objects.signals import Corn
         if int(touch.x) < self.bppos[0] or int(touch.y) > self.bppos[1]+self.backpack.size[1]:
             #was the click outside of the backpack? this is if not
             if self.current_signal == "corn":
