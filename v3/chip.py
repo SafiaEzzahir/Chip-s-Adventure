@@ -26,6 +26,7 @@ class Chip(Widget):
         self.pos = (self.posx, self.posy)
 
         self.init_sound()
+        self.init_moods()
 
         self.angle = 0
         self.rot = Rotate()
@@ -39,9 +40,24 @@ class Chip(Widget):
 
     def init_sound(self):
         self.hungry = True
-        self.chirp = SoundLoader.load("v3/assets/chipchirp.wav")
+        self.chirp = SoundLoader.load("assets/chipchirp.wav")
         self.sound_randomness = 20
         self.sound_count = 0
+
+    def init_moods(self):
+        from chipmoods import Hunger, Confusion, Happiness, Fear, Freedom
+        self.hunger = Hunger()
+        self.confusion = Confusion()
+        self.happiness = Happiness()
+        self.fear = Fear()
+        self.freedom = Freedom()
+
+    def event_happens(self, event):
+        self.hunger.event_reaction(event)
+        self.confusion.event_reaction(event)
+        self.happiness.event_reaction(event)
+        self.fear.event_reaction(event)
+        self.freedom.event_reaction(event)
 
     def move_towards(self, target_x, target_y):
         center_x = self.pos[0] + self.sizes[0]
