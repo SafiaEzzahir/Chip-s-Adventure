@@ -41,10 +41,10 @@ class SettingsScreen(Screen):
         self.init_home()
 
     def init_home(self):
-        self.sparkle = SoundLoader.load("v3/assets/sparkle.wav")
-        self.chirp = SoundLoader.load("v3/assets/chipchirp.wav")
-        self.home_button = Button(background_normal="v3/assets/homeicon.png", 
-                                  background_down="v3/assets/homeicondown.png", 
+        self.sparkle = SoundLoader.load("assets/sparkle.wav")
+        self.chirp = SoundLoader.load("assets/chipchirp.wav")
+        self.home_button = Button(background_normal="assets/homeicon.png", 
+                                  background_down="assets/homeicondown.png", 
                                   size_hint=(None, None), 
                                   size=self.home_button_sizes, 
                                   pos=(self.home_button_padding, self.height-self.home_button_sizes[1]-self.home_button_padding), 
@@ -65,7 +65,7 @@ class SettingsScreen(Screen):
         widget.pos = (x, y)
         
     def init_label(self, text, pos, col):
-        label = Label(text=text, pos=pos, color=col, font_size=dp(30), font_name="v3/assets/fontly.ttf", size_hint=(None, None), size=(dp(200), dp(40)))
+        label = Label(text=text, pos=pos, color=col, font_size=dp(30), font_name="assets/fontly.ttf", size_hint=(None, None), size=(dp(200), dp(40)))
         self.add_widget(label)
         return label
 
