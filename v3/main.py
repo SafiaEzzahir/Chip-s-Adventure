@@ -13,8 +13,6 @@ class Screener(ScreenManager):
         from screens.settings import SettingsScreen
         from screens.win import WinScreen
         from screens.lose import LoseScreen
-        from gamemanager import GameManager
-        self.gamemanager = GameManager()
         self.menu = MenuScreen()
         self.level = LevelScreen()
         self.cutscene = CutsceneScreen()
