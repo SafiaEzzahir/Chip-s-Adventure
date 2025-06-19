@@ -6,5 +6,8 @@ class MapScreen(Screen):
         self.name = "map"
         self.current = "map"
 
+    def update(self):
+        pass
+
     def is_changed(self):
         return self.current
