@@ -46,6 +46,12 @@ class LevelScreen(Screen):
             self.add_widget(char)
         self.add_widget(self.chip)
         self.add_widget(self.backpack)
+        self.init_map()
+
+    def init_map(self):
+        from level_objects.mapobj import Map
+        self.map = Map()
+        self.add_widget(self.map)
 
     def init_target(self):
         with self.canvas:
@@ -69,6 +75,9 @@ class LevelScreen(Screen):
             Color(*self.backroundcol)
             self.backround = Rectangle(size=(self.width, self.height))
             Color(*get_color_from_hex("6E514A"))
+
+    def update_map(self):
+        self.map.update(self)
 
     def update_graphics(self):
         self.backround.size = (self.width, self.height)
@@ -161,6 +170,8 @@ class LevelScreen(Screen):
         self.backpack.update(self.current_allowed_signals)
         for corn in self.corns:
             corn.update()
+
+        self.update_map()
 
         self.did_you_win()
 

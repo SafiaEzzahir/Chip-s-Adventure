@@ -13,18 +13,21 @@ class Screener(ScreenManager):
         from screens.settings import SettingsScreen
         from screens.win import WinScreen
         from screens.lose import LoseScreen
+        from screens.map import MapScreen
         self.menu = MenuScreen()
         self.level = LevelScreen()
         self.cutscene = CutsceneScreen()
         self.settings = SettingsScreen()
         self.win = WinScreen()
         self.lose = LoseScreen()
+        self.map = MapScreen()
         self.add_widget(self.menu)
         self.add_widget(self.level)
         self.add_widget(self.cutscene)
         self.add_widget(self.settings)
         self.add_widget(self.win)
         self.add_widget(self.lose)
+        self.add_widget(self.map)
         self.current = "menu"
         Clock.schedule_interval(self.update, 1.0/20.0)
 
