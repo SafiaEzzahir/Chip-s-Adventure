@@ -14,6 +14,9 @@ class Map(Button):
 
         self.mapscreen = False
 
+    def default(self):
+        self.mapscreen = False
+
     def pressed(self, instance):
         self.mapscreen = True
 

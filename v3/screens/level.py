@@ -80,6 +80,7 @@ class LevelScreen(Screen):
         self.map.update(self)
         if self.map.mapscreen:
             self.current_level = "map"
+            self.map.default()
 
     def update_graphics(self):
         self.backround.size = (self.width, self.height)
@@ -146,6 +147,7 @@ class LevelScreen(Screen):
                 self.current_level = "lose"
 
     def update(self):
+        self.current_level = "level"
         self.update_graphics()
         self.target.pos = (self.width-dp(60), self.height-dp(60))
 
