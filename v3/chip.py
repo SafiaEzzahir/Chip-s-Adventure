@@ -46,8 +46,8 @@ class Chip(Widget):
 
     def init_moods(self):
         from chipmoods import Hunger, Confusion, Happiness, Fear, Freedom
-        self.hunger = Hunger()
-        self.confusion = Confusion()
+        self.hunger = Hunger(0)
+        self.confusion = Confusion(0)
         self.happiness = Happiness()
         self.fear = Fear()
         self.freedom = Freedom()
@@ -90,6 +90,8 @@ class Chip(Widget):
             self.signal_to_remove = signal
             if signal.type == "footprint":
                 self.state = "following footsteps"
+            elif signal.type == "corn":
+                self.event_happens("corn")
 
     def distance_to(self, posx, posy):
         return Vector((self.pos[0], self.pos[1]+self.sizes[1]/2)).distance((posx, posy))
@@ -125,6 +127,7 @@ class Chip(Widget):
             self.nearest = self.find_nearest_signal(signals)
 
     def update(self, signals):
+        self.event_happens("time")
         self.update_state(signals)
         self.rot.angle = self.angle
         self.rot.origin = self.center
