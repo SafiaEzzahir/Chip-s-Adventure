@@ -9,31 +9,34 @@ class LevelScreen(Screen):
         from chip import Chip
         from characters.fox import Fox
         from level_objects.signals import Footprint
+        from screens.levels import LevelManager
         super().__init__(**kwargs)
         self.name = "level"
         self.current_level = "level"
+        self.level_number = 1
+        self.levelmanager = LevelManager(self.level_number)
         self.chip = Chip()
-        self.backround = None
 
         self.characters = []
-        self.fox = Fox((dp(300), dp(250)), self)
-        self.characters.append(self.fox)
+        for key in self.levelmanager.chars:
+            if key == "fox":
+                self.characters.append(Fox(self.levelmanager.chars[key], self))
+            else:
+                print("error")
 
         self.signal_types = ["corn", "footprint", "phonebox"]
         self.signals = []
         self.corns = []
         self.footprints_used = False
         self.footprints = Footprint()
-        #self.signals.append(self.fox)
 
-        self.backroundcol = get_color_from_hex("#FFC184")
+        self.allowed_signals = self.levelmanager.allowed_signals
+        self.current_allowed_signals = self.allowed_signals
+        self.current_signal = None
+
         self.bpwidth = dp(400)
         self.bpheight = dp(120)
         self.bppos = (self.width-self.bpwidth-dp(5), dp(5))
-        
-        self.allowed_signals = {"corn": 4, "footprints": 1}
-        self.current_allowed_signals = {"corn": 4, "footprints": 1}
-        self.current_signal = None
         
         from level_objects.backpack import Backpack
         self.backpack = Backpack(self.current_allowed_signals, (self.bpwidth, self.bpheight), self.bppos, self.bpwidth, self.bpheight, self)
@@ -60,10 +63,7 @@ class LevelScreen(Screen):
 
     def init_phoneboxes(self):
         from level_objects.signals import PhoneBox
-        box1 = (0, 0)
-        box2 = (120, 0)
-        box3 = (400, 0)
-        self.phoneboxes_positions = [box1]
+        self.phoneboxes_positions = self.levelmanager.phoneboxes
         self.phoneboxes = []
         for box in self.phoneboxes_positions:
             pb = PhoneBox(box)
@@ -72,7 +72,7 @@ class LevelScreen(Screen):
 
     def init_graphics(self):
         with self.canvas:
-            Color(*self.backroundcol)
+            Color(*get_color_from_hex(self.levelmanager.backgroundcol))
             self.backround = Rectangle(size=(self.width, self.height))
             Color(*get_color_from_hex("6E514A"))
 
@@ -109,7 +109,7 @@ class LevelScreen(Screen):
                 if self.footprints_used == False:
                     self.footprints.init((touch.x, touch.y))
                     self.footprints_used = True
-                    self.current_allowed_signals["footprints"] = 0
+                    self.current_allowed_signals["footprints"] -= 1
                     self.footprints.update()  # <-- make sure first footprint is shown
                 else:
                     self.footprints.second_position = (touch.x, touch.y)
@@ -143,8 +143,49 @@ class LevelScreen(Screen):
         if count == len(self.current_allowed_signals) and self.signals==[]:
             if self.winning_pos():
                 self.current_level = "win"
+                self.level_number +=1
+                self.reset()
             else:
                 self.current_level = "lose"
+
+    def reset(self):
+        self.clear_widgets()
+
+        from characters.fox import Fox
+        from screens.levels import LevelManager
+        from level_objects.signals import Footprint
+
+        self.levelmanager = LevelManager(self.level_number)
+
+        self.characters = []
+        for key in self.levelmanager.chars:
+            if key == "fox":
+                self.characters.append(Fox(self.levelmanager.chars[key], self))
+            else:
+                print("error")
+
+        self.signal_types = ["corn", "footprint", "phonebox"]
+        self.signals = []
+        self.corns = []
+        self.footprints_used = False
+        self.footprints = Footprint()
+
+        self.allowed_signals = self.levelmanager.allowed_signals
+        self.current_allowed_signals = self.allowed_signals
+        self.current_signal = None
+        
+        from level_objects.backpack import Backpack
+        self.backpack = Backpack(self.current_allowed_signals, (self.bpwidth, self.bpheight), self.bppos, self.bpwidth, self.bpheight, self)
+
+        self.init_graphics()
+        self.init_target()
+        self.add_widget(self.footprints)
+        self.init_phoneboxes()
+        for char in self.characters:
+            self.add_widget(char)
+        self.add_widget(self.chip)
+        self.add_widget(self.backpack)
+        self.init_map()
 
     def update(self):
         self.current_level = "level"
