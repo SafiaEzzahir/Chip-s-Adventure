@@ -1,12 +1,12 @@
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
+from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 from kivy.lang import Builder
 from kivy.properties import Clock
 
 class Screener(ScreenManager):  
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.transition = FadeTransition()
+        self.transition = NoTransition()
         from screens.menu import MenuScreen
         from screens.level import LevelScreen
         from screens.cutscenes import CutsceneScreen

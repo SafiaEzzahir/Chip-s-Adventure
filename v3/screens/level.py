@@ -14,6 +14,7 @@ class LevelScreen(Screen):
         self.name = "level"
         self.current_level = "level"
         self.level_number = 1
+        self.old_level = 1
         self.levelmanager = LevelManager(self.level_number)
         self.chip = Chip()
 
@@ -144,12 +145,18 @@ class LevelScreen(Screen):
             if self.winning_pos():
                 self.current_level = "win"
                 self.level_number +=1
-                self.reset()
             else:
                 self.current_level = "lose"
+                self.reset()
+
+    def new_level(self):
+        if self.old_level != self.level_number:
+            self.reset()
 
     def reset(self):
         self.clear_widgets()
+
+        self.old_level += 1
 
         from characters.fox import Fox
         from screens.levels import LevelManager
@@ -189,6 +196,7 @@ class LevelScreen(Screen):
 
     def update(self):
         self.current_level = "level"
+        self.new_level()
         self.update_graphics()
         self.target.pos = (self.width-dp(60), self.height-dp(60))
 
