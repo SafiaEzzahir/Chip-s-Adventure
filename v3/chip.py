@@ -1,5 +1,6 @@
 from kivy.uix.widget import Widget
 from kivy.graphics.vertex_instructions import Rectangle
+from kivy.graphics.vertex_instructions import Line
 from kivy.uix.image import Image
 from kivy.metrics import dp
 from kivy.vector import Vector
@@ -7,6 +8,7 @@ from kivy.graphics.context_instructions import Color
 from kivy.graphics import PushMatrix, PopMatrix, Rotate
 from kivy.core.audio import SoundLoader
 from math import atan2, degrees
+from random import randint
 
 class Chip(Widget):
     def __init__(self, **kwargs):
@@ -20,6 +22,8 @@ class Chip(Widget):
         self.manage_count = 0
         self.nearest = None
         self.signal_to_remove = None
+
+        self.start_confused = False
 
         self.size_hint = (None, None)
         self.size = self.sizes
@@ -39,7 +43,6 @@ class Chip(Widget):
             PopMatrix()
 
     def init_sound(self):
-        self.hungry = True
         self.chirp = SoundLoader.load("assets/chipchirp.wav")
         self.sound_randomness = 20
         self.sound_count = 0
@@ -84,6 +87,27 @@ class Chip(Widget):
         self.rot.angle = self.angle
         self.rot.origin = self.center
 
+    def move_towards2(self, target_x, target_y):
+        dx = target_x - self.pos[0]
+        dy = target_y - self.pos[1]
+        dist = (dx**2 + dy**2) ** 0.5
+
+        if dist < (self.confusion.speed*3/4):
+            self.pos[0] = target_x
+            self.pos[1] = target_y
+            return
+
+        step_x = dx / dist * (self.confusion.speed/8*5)
+        step_y = dy / dist * (self.confusion.speed/8*5)
+
+        self.pos[0] += step_x
+        self.pos[1] += step_y
+        self.image.pos = self.pos
+
+        self.angle = degrees(atan2(dy, dx))
+        self.rot.angle = self.angle
+        self.rot.origin = self.center
+
     def move_to(self, signal, signals, target_posx, target_posy):
         self.move_towards(target_posx, target_posy)
         if self.state == "arrived" and signal in signals:
@@ -116,13 +140,47 @@ class Chip(Widget):
             self.chirp.play()
             self.sound_count = 0
 
+    def confused_animation(self):
+        if not self.start_confused:
+            x = dp(randint(50, 100))
+            y = dp(randint(-100, 100))
+            p1 = (self.pos[0]+self.image.size[0]/2-x, self.pos[1]+self.image.size[1]/2+y)
+            p2 = (self.pos[0]+x+self.image.size[0]/2, self.pos[1]-y+self.image.size[1]/2)
+            self.p1 = (p1[0]-self.image.size[0], p1[1]-self.image.size[1])
+            self.p2 = (p2[0]-self.image.size[0], p2[1]-self.image.size[1])
+            self.next_pos = self.p1
+            self.start_confused = True
+        else:
+            if (round(self.image.pos[0]), round(self.image.pos[1])) != (round(self.next_pos[0]), round(self.next_pos[1])):
+                self.move_towards2(self.next_pos[0], self.next_pos[1])
+            else:
+                if self.next_pos == self.p1:
+                    self.next_pos = self.p2
+                elif self.next_pos == self.p2:
+                    self.next_pos = self.p1
+
+    def reset(self):
+        self.confusion.reset()
+        self.hunger.reset()
+        self.happiness.reset()
+        self.fear.reset()
+        self.freedom.reset()
+
     def update_state(self, signals):
-        if self.nearest:
+        if self.confusion.feeling == "very bad":
+            self.state = "confused"
+            self.confusion.change_speed(5)
+        elif self.nearest:
             if self.state in  ["moving", "arrived"]:
                 self.move_to(self.nearest, signals, self.nearest.posx, self.nearest.posy)
+        elif self.confusion.feeling == "bad":
+            self.state = "confused"
+            self.confusion.change_speed(1)
             
         if self.state == "following footsteps":
             self.follow_footsteps()
+        elif self.state == "confused":
+            self.confused_animation()
         else:
             self.nearest = self.find_nearest_signal(signals)
 
@@ -132,5 +190,4 @@ class Chip(Widget):
         self.rot.angle = self.angle
         self.rot.origin = self.center
         self.image.pos = self.pos
-        if self.hungry:
-            self.make_sound()
+        #self.make_sound()

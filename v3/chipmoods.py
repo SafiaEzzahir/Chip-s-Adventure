@@ -45,6 +45,11 @@ class Mood():
         if self.timer.check():
             print(f"your score is {self.value} and chip is {self.feeling} {self.name}")
 
+    def reset(self):
+        self.value = 0
+        self.feeling = "neutral"
+        self.specific_init()
+
 class Hunger(Mood):
     def specific_init(self):
         self.name = "hunger"
@@ -64,16 +69,27 @@ class Confusion(Mood):
     def specific_init(self):
         self.name = "confusion"
         self.timer = Timer(250)
+        self.speed_timer = Timer(100)
+        self.speed = 0
 
     def event_reaction(self, event):
         if event == "time":
             self.timer.update()
+            self.speed_timer.update()
             if self.timer.check():
                 self.change_val(-1)
         elif event == "corn":
             self.change_val(1)
+        elif event == "no signal":
+            if self.timer.check():
+                self.change_val(-3)
 
         self.update_and_print()
+
+    def change_speed(self, val):
+        if self.speed_timer.check():
+            self.speed += val
+            print(self.speed)
 
 class Happiness(Mood):
     def __init__(self):
