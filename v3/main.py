@@ -7,6 +7,7 @@ class Screener(ScreenManager):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.transition = NoTransition()
+        self.new_data = {}
         from screens.menu import MenuScreen
         from screens.level import LevelScreen
         from screens.cutscenes import CutsceneScreen
@@ -35,10 +36,13 @@ class Screener(ScreenManager):
         change = self.current_screen.is_changed()
         newcurrent = change
         if newcurrent != self.current:
+            self.old_data = self.new_data
+            self.new_data = self.current_screen.update()
             self.canvas.clear()
             self.current = newcurrent
             self.current_screen.change = self.current_screen.name
-        self.current_screen.update()
+        else:
+            self.current_screen.update()
 
 class Version3App(App):
     def build(self):

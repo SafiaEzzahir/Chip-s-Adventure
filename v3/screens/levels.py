@@ -8,7 +8,7 @@ class LevelManager():
     def level1(self):
         self.phoneboxes = []
         self.chars = {}
-        self.allowed_signals = {"corn": 5, "footprints": 1}
+        self.allowed_signals = {"corn": 2, "footprints": 1}
         self.backgroundcol = "135879"
 
     def level2(self):

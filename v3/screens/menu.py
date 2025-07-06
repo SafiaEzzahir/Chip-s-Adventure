@@ -73,3 +73,4 @@ class MenuScreen(Screen):
 
     def update(self):
         self.updategraphics()
+        return {}

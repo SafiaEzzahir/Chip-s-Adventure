@@ -28,14 +28,36 @@ class LoseScreen(Screen):
         super().__init__(**kwargs)
         self.name = "lose"
 
+        with self.canvas:
+            Color(1, 1, 1, 1)
+            self.background_rect = Rectangle(pos=(0, 0), size=(self.width, self.height))
+
         self.label = Label(text="you lose")
         self.button = TryAgainButton()
 
         self.add_widget(self.label)
         self.add_widget(self.button)
 
-    def update(self):
+    def fox(self):
         pass
+
+    def confusion(self):
+        print("here")
+        with self.canvas:
+            Color(1, 0, 1, 1)
+            self.background_rect = Rectangle(pos=(0, 0), size=(self.width, self.height))
+
+    def update(self):
+        self.background_rect.size = (self.width, self.height)
+
+        self.label.pos = self.label.pos
+        self.button.pos = self.button.pos
+        
+        if "loss" in self.parent.new_data:
+            if self.parent.new_data["loss"] == "confusion":
+                self.confusion()
+
+        return self.parent.new_data
 
     def is_changed(self):
         if self.button.nextlevel:

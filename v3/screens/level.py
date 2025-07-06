@@ -18,6 +18,8 @@ class LevelScreen(Screen):
         self.levelmanager = LevelManager(self.level_number)
         self.chip = Chip()
 
+        self.loss = "none"
+
         self.characters = []
         for key in self.levelmanager.chars:
             if key == "fox":
@@ -145,9 +147,16 @@ class LevelScreen(Screen):
             if self.winning_pos():
                 self.current_level = "win"
                 self.level_number +=1
+            #else:
+            #    self.current_level = "lose"
+            #    self.reset()
             else:
-                self.current_level = "lose"
-                self.reset()
+                self.chip.event_happens("no signal")
+
+        if self.chip.confusion.value <= -12:
+            self.current_level = "lose"
+            self.loss = "confusion"
+            self.reset()
 
     def new_level(self):
         if self.old_level != self.level_number:
@@ -163,6 +172,8 @@ class LevelScreen(Screen):
         from level_objects.signals import Footprint
 
         self.levelmanager = LevelManager(self.level_number)
+
+        self.chip.reset()
 
         self.characters = []
         for key in self.levelmanager.chars:
@@ -227,6 +238,8 @@ class LevelScreen(Screen):
         self.update_map()
 
         self.did_you_win()
+
+        return {"loss": self.loss}
 
     def is_changed(self):
         return self.current_level

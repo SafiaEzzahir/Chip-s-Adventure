@@ -84,6 +84,8 @@ class SettingsScreen(Screen):
         self.title.center_x = self.center_x
         self.title.center_y = self.height - dp(50)
 
+        return {}
+
     def onhome(self, instance):
         self.sparkle.play()
         self.chirp.play()
